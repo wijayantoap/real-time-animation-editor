@@ -5,6 +5,22 @@ import { useState } from 'react';
 import Header from '../components/Header';
 import Lottie from 'react-lottie-player';
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 function Workspace() {
   return (
@@ -20,6 +36,22 @@ function Workspace() {
           <Typography variant="h4" gutterBottom fontWeight={'bold'} sx={{ my: 3 }}>
             Workspace
           </Typography>
+          <Box>
+            <Button
+              component={Link}
+              to={'/featured'}
+              variant="outlined"
+              size="small"
+              sx={{ fontWeight: 'bold', mr: 1 }}
+              startIcon={<ThumbUpOffAltIcon />}
+            >
+              Import featured animation
+            </Button>
+            <Button component="label" variant="contained" size="small" sx={{ fontWeight: 'bold' }} startIcon={<FileUploadOutlinedIcon />}>
+              Upload animation
+              <VisuallyHiddenInput type="file" />
+            </Button>
+          </Box>
           <>
             <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: 'flex-start' }}>
               {[1, 2, 3, 4, 5, 6, 7, 8, 10].map((item) => (

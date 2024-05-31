@@ -24,7 +24,7 @@ function Featured() {
   });
 
   return (
-    <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh', pb: 2 }}>
       <Header />
       <Container maxWidth="lg">
         <Box
@@ -89,8 +89,10 @@ function Featured() {
                       last: 20,
                     });
                   }}
+                  startIcon={<ArrowBackIosIcon />}
+                  sx={{ fontWeight: 'bold' }}
                 >
-                  <ArrowBackIosIcon /> Prev
+                  Prev
                 </Button>
                 <Button
                   disabled={!data?.featuredPublicAnimations?.pageInfo?.hasNextPage}
@@ -102,8 +104,10 @@ function Featured() {
                       last: 0,
                     });
                   }}
+                  endIcon={<ArrowForwardIosIcon />}
+                  sx={{ fontWeight: 'bold' }}
                 >
-                  Next <ArrowForwardIosIcon />
+                  Next
                 </Button>
               </Box>
             </>
