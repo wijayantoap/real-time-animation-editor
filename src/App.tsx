@@ -2,6 +2,7 @@ import './App.css';
 import Header from './components/Header';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 
 let theme = createTheme({
   typography: {
@@ -39,12 +40,34 @@ let theme = createTheme({
 
 theme = responsiveFontSizes(theme);
 
+const client = new ApolloClient({
+  uri: 'https://flyby-router-demo.herokuapp.com/',
+  cache: new InMemoryCache(),
+});
+
+client
+  .query({
+    query: gql`
+      query GetLocations {
+        locations {
+          id
+          name
+          description
+          photo
+        }
+      }
+    `,
+  })
+  .then((result) => console.log(result));
+
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Header />
-      <Home />
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Home />
+      </ThemeProvider>
+    </ApolloProvider>
   );
 }
 
