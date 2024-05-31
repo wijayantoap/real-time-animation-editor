@@ -42,7 +42,7 @@ function Workspace() {
               to={'/featured'}
               variant="outlined"
               size="small"
-              sx={{ fontWeight: 'bold', mr: 1 }}
+              sx={{ fontWeight: 'bold', mr: 1, mb: { xs: 2, sm: 0 } }}
               startIcon={<ThumbUpOffAltIcon />}
             >
               Import featured animation
@@ -53,9 +53,9 @@ function Workspace() {
             </Button>
           </Box>
           <>
-            <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: 'flex-start' }}>
+            <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
               {[1, 2, 3, 4, 5, 6, 7, 8, 10].map((item) => (
-                <Grid item>
+                <Grid item component={Link} to={'/workspace/123'} sx={{ textDecoration: 'none' }}>
                   <Box
                     sx={{
                       width: 214,
@@ -81,6 +81,7 @@ function Workspace() {
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
                             width: '100%',
+                            color: 'black',
                           }}
                         >
                           Workspace name loooooooooong

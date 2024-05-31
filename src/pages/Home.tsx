@@ -55,7 +55,18 @@ function Home() {
               Join Now - It's Free
             </Button>
           </Box>
-          <Lottie loop animationData={homeAnim} play style={{ width: '100%', height: '100%' }} />
+          <Box
+            sx={{
+              display: {
+                xs: 'none',
+                sm: 'block',
+              },
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Lottie loop animationData={homeAnim} play style={{ width: '100%', height: '100%' }} />
+          </Box>
         </Box>
         <FormDialog open={open} setOpen={setOpen} />
       </Container>
