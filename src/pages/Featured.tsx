@@ -24,7 +24,7 @@ function Featured() {
   });
 
   return (
-    <Box sx={{ backgroundColor: '#FBFCFD' }}>
+    <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh' }}>
       <Header />
       <Container maxWidth="lg">
         <Box

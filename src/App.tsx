@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Featured from './pages/Featured';
+import Workspace from './pages/Workspace';
 
 let theme = createTheme({
   typography: {
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
   {
     path: '/featured',
     element: <Featured />,
+  },
+  {
+    path: '/workspace',
+    element: <Workspace />,
+  },
+  {
+    path: 'workspace/:workspaceId',
+    element: <Workspace />,
   },
 ]);
 
