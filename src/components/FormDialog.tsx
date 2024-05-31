@@ -4,8 +4,6 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import { Divider, Typography } from '@mui/material';
 
 interface FormDialogProps {
@@ -14,7 +12,7 @@ interface FormDialogProps {
 }
 
 const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState(false);
 
   const handleClose = () => {
     setOpen(false);

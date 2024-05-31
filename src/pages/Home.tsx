@@ -41,14 +41,15 @@ function Home() {
             sx={{
               mt: 2,
               fontSize: 16,
-              letterSpacing: 4,
+              letterSpacing: 1.5,
               fontWeight: 'bold',
               px: 4,
               py: 1.5,
+              borderRadius: 4,
             }}
             onClick={() => setOpen(true)}
           >
-            Join Now
+            Join Now - It's Free
           </Button>
         </Box>
         <Lottie animationData={homeAnim} loop={true} style={{ width: '100%', height: '100%' }} />
