@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 const GET_FEATURED = gql`
   query {
-    featuredPublicAnimations(first: 3) {
+    featuredPublicAnimations(first: 20) {
       edges {
         cursor
         node {

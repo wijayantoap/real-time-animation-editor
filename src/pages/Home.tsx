@@ -1,9 +1,9 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import homeAnim from '../assets/home_anim.json';
-import Lottie from 'lottie-react';
 import FormDialog from '../components/FormDialog';
 import { useState } from 'react';
 import Header from '../components/Header';
+import Lottie from 'react-lottie-player';
 
 function Home() {
   const [open, setOpen] = useState(false);
@@ -55,7 +55,7 @@ function Home() {
               Join Now - It's Free
             </Button>
           </Box>
-          <Lottie animationData={homeAnim} loop={true} style={{ width: '100%', height: '100%' }} />
+          <Lottie loop animationData={homeAnim} play style={{ width: '100%', height: '100%' }} />
         </Box>
         <FormDialog open={open} setOpen={setOpen} />
       </Container>

@@ -40,7 +40,7 @@ function Header() {
   };
 
   return (
-    <AppBar position="static" color="transparent">
+    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white' }}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <Box
