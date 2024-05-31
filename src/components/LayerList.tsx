@@ -11,8 +11,24 @@ import { IconButton } from '@mui/material';
 import RectangleRoundedIcon from '@mui/icons-material/RectangleRounded';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-export default function LayerList() {
+// Define the type for a Layer object based on common Lottie properties
+interface Layer {
+  nm: string; // name
+  ty: number; // type
+  st: number; // start frame
+  op: number; // end frame
+  [key: string]: any; // to allow other properties that we may not explicitly define
+}
+interface LayerListProps {
+  layers: Layer[];
+  layersShown: number[];
+  hideLayer: (show: boolean, index: number) => void;
+  deleteLayer: (index: number) => void;
+}
+
+const LayerList: React.FC<LayerListProps> = ({ layers, layersShown, hideLayer, deleteLayer }) => {
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -54,22 +70,27 @@ export default function LayerList() {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {[1, 2, 3].map((item, index) => (
-            <ListItemButton disableRipple sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <RectangleRoundedIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
-              </ListItemIcon>
-              <ListItemText primary={`Layers ${index + 1}`} />
-              <IconButton size="small">
-                <VisibilityIcon sx={{ width: 16, height: 16 }} />
-              </IconButton>
-              <IconButton size="small">
-                <DeleteForeverOutlinedIcon sx={{ width: 16, height: 16 }} />
-              </IconButton>
-            </ListItemButton>
-          ))}
+          {layers?.map((item, index) => {
+            const isShown = layersShown.includes(index);
+            return (
+              <ListItemButton disableRipple sx={{ pl: 4 }}>
+                <ListItemIcon>
+                  <RectangleRoundedIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
+                </ListItemIcon>
+                <ListItemText primary={item?.nm} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} />
+                <IconButton size="small" onClick={() => hideLayer(isShown, index)}>
+                  {isShown ? <VisibilityIcon sx={{ width: 16, height: 16 }} /> : <VisibilityOffIcon sx={{ width: 16, height: 16 }} />}
+                </IconButton>
+                <IconButton size="small" onClick={() => deleteLayer(index)}>
+                  <DeleteForeverOutlinedIcon sx={{ width: 16, height: 16 }} />
+                </IconButton>
+              </ListItemButton>
+            );
+          })}
         </List>
       </Collapse>
     </List>
   );
-}
+};
+
+export default LayerList;
