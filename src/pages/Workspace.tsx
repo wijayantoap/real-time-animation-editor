@@ -1,14 +1,12 @@
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import homeAnim from '../assets/home_anim.json';
-import FormDialog from '../components/FormDialog';
-import { useState } from 'react';
 import Header from '../components/Header';
-import Lottie from 'react-lottie-player';
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -70,7 +68,7 @@ function Workspace() {
                       },
                     }}
                   >
-                    <Lottie loop animationData={homeAnim} play style={{ width: '100%', height: 158 }} />
+                    <Player autoplay loop src={homeAnim} style={{ width: '100%', height: 158 }} />
                     <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                       <FileOpenOutlinedIcon sx={{ color: 'primary.main' }} />
                       <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '80%', ml: 1 }}>

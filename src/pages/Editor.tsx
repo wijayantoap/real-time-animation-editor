@@ -1,9 +1,9 @@
 import { Box, Grid } from '@mui/material';
 import homeAnim from '../assets/home_anim.json';
 import Header from '../components/Header';
-import Lottie from 'react-lottie-player';
 import LayerList from '../components/LayerList';
 import PanelTab from '../components/PanelTab';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 function Editor() {
   return (
@@ -30,7 +30,7 @@ function Editor() {
               height: '100vh',
             }}
           >
-            <Lottie loop animationData={homeAnim} play style={{ width: 500, height: '100%' }} />
+            <Player autoplay loop src={homeAnim} style={{ height: 500, width: '100%' }}></Player>
           </Box>
         </Grid>
         <Grid item xs={2.5}>

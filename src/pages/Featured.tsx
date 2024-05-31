@@ -4,11 +4,11 @@ import { useState } from 'react';
 import Header from '../components/Header';
 import GET_FEATURED from '../queries/featuredPublicAnimations';
 import { useQuery } from '@apollo/client';
-import Lottie from 'react-lottie-player';
 import loader from '../assets/loader.json';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 function Featured() {
   const [open, setOpen] = useState(false);
@@ -41,7 +41,7 @@ function Featured() {
           <Typography variant="body1" color="gray">
             Bring your projects to life with top free animations from LottieFiles' extensive library.
           </Typography>
-          {loading && <Lottie play loop animationData={loader} />}
+          {loading && <Player autoplay loop src={loader} />}
           {data && (
             <>
               <Grid container sx={{ flex: 1, my: 4, justifyContent: 'center' }} spacing={2}>
@@ -50,13 +50,15 @@ function Featured() {
                     item: any, // TODO: Change to ts type
                   ) => (
                     <Grid item>
-                      <Lottie
-                        path={item?.node?.jsonUrl}
-                        loop
-                        play
-                        style={{ width: 212, height: 212, border: '1px solid #D7DFE6', borderRadius: 8, cursor: 'pointer' }}
-                        onClick={() => setOpen(true)}
-                      />
+                      <Box onClick={() => setOpen(true)}>
+                        <Player
+                          autoplay
+                          loop
+                          src={item?.node?.jsonUrl}
+                          style={{ width: 212, height: 212, border: '1px solid #D7DFE6', borderRadius: 8, cursor: 'pointer' }}
+                        />
+                      </Box>
+
                       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt: 1, mb: 2 }}>
                         <Box sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
                           <Avatar src={item?.node?.createdBy?.avatarUrl} sx={{ mr: 1, height: 24, width: 24 }} />

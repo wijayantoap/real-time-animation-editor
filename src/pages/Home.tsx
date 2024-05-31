@@ -3,7 +3,7 @@ import homeAnim from '../assets/home_anim.json';
 import FormDialog from '../components/FormDialog';
 import { useState } from 'react';
 import Header from '../components/Header';
-import Lottie from 'react-lottie-player';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 function Home() {
   const [open, setOpen] = useState(false);
@@ -59,13 +59,14 @@ function Home() {
             sx={{
               display: {
                 xs: 'none',
-                sm: 'block',
+                sm: 'flex',
               },
               width: '100%',
               height: '100%',
+              alignItems: 'center',
             }}
           >
-            <Lottie loop animationData={homeAnim} play style={{ width: '100%', height: '100%' }} />
+            <Player autoplay loop src={homeAnim} style={{ height: '100%', width: '100%' }} />
           </Box>
         </Box>
         <FormDialog open={open} setOpen={setOpen} />
