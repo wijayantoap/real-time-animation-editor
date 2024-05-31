@@ -1,8 +1,9 @@
-import './App.css';
-import Header from './components/Header';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Featured from './pages/Featured';
 
 let theme = createTheme({
   typography: {
@@ -45,6 +46,17 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/featured',
+    element: <Featured />,
+  },
+]);
+
 client
   .query({
     query: gql`
@@ -64,8 +76,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <Header />
-        <Home />
+        <RouterProvider router={router}></RouterProvider>
       </ThemeProvider>
     </ApolloProvider>
   );

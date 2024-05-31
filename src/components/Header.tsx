@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['Featured', 'Workspace'];
 const settings = ['Profile', 'Logout'];
 
 function Header() {
