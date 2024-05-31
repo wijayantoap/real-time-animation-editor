@@ -12,8 +12,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
+import { Link } from 'react-router-dom';
 
-const pages = ['Featured', 'Workspace'];
+const pages = [
+  { title: 'Featured', to: '/featured' },
+  { title: 'Workspace', to: '/workspace' },
+];
 const settings = ['Profile', 'Logout'];
 
 function Header() {
@@ -57,7 +61,7 @@ function Header() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               ml: 1,
               mr: 2,
@@ -100,8 +104,8 @@ function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.title} component={Link} to={page.to} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -110,7 +114,7 @@ function Header() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -124,8 +128,8 @@ function Header() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'gray', display: 'block' }}>
-                {page}
+              <Button key={page.title} onClick={handleCloseNavMenu} component={Link} to={page.to} sx={{ my: 2, color: 'gray', display: 'block' }}>
+                {page.title}
               </Button>
             ))}
           </Box>

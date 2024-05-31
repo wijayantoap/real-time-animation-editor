@@ -4,9 +4,15 @@ import Lottie from 'lottie-react';
 import FormDialog from '../components/FormDialog';
 import { useState } from 'react';
 import Header from '../components/Header';
+import GET_FEATURED from '../queries/featuredPublicAnimations';
+import { useQuery } from '@apollo/client';
 
 function Featured() {
   const [open, setOpen] = useState(false);
+  const { loading, error, data } = useQuery(GET_FEATURED);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <>

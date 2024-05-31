@@ -42,7 +42,7 @@ let theme = createTheme({
 theme = responsiveFontSizes(theme);
 
 const client = new ApolloClient({
-  uri: 'https://flyby-router-demo.herokuapp.com/',
+  uri: 'https://graphql.lottiefiles.com/2022-08',
   cache: new InMemoryCache(),
 });
 
@@ -56,21 +56,6 @@ const router = createBrowserRouter([
     element: <Featured />,
   },
 ]);
-
-client
-  .query({
-    query: gql`
-      query GetLocations {
-        locations {
-          id
-          name
-          description
-          photo
-        }
-      }
-    `,
-  })
-  .then((result) => console.log(result));
 
 function App() {
   return (
