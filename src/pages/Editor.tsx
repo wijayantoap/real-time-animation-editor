@@ -108,7 +108,7 @@ function Editor() {
             <Player
               ref={animRef}
               lottieRef={(instance) => setLottieRef(instance)}
-              autoplay
+              autoplay={!currentFrame?.isPaused}
               loop
               src={animation}
               onEvent={handleLottieEvent}
