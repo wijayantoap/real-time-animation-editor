@@ -6,6 +6,8 @@ import PanelTab from '../components/PanelTab';
 import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import EditorHeader from '../components/EditorHeader';
+import { Navigate } from 'react-router-dom';
+import useSession from '../hooks/useSession';
 
 export interface LottieJson {
   v: string; // Version
@@ -32,6 +34,8 @@ function Editor() {
     isPaused: false,
     frame: 0,
   });
+
+  const { data } = useSession();
 
   console.log(animation);
 
@@ -89,6 +93,8 @@ function Editor() {
       });
     }
   }, [animation, layersShown, layersDeleted]);
+
+  if (!data?.user) return <Navigate to="/" />;
 
   return (
     <>

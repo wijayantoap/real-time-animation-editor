@@ -4,9 +4,10 @@ import Header from '../components/Header';
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Player } from '@lottiefiles/react-lottie-player';
+import useSession from '../hooks/useSession';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -21,6 +22,10 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 function Workspace() {
+  const { data } = useSession();
+
+  if (!data?.user) return <Navigate to="/" />;
+
   return (
     <Box sx={{ backgroundColor: '#F3F6F8', minHeight: '100vh' }}>
       <Header />
