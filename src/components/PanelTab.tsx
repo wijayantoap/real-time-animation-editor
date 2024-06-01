@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import ColorTab from './ColorTab';
 import SettingsTab from './SettingsTab';
-import InfoTab from './IntoTab';
 import { Layer } from './LayerList';
 import { LottieJson } from '../pages/Editor';
 
@@ -49,7 +48,7 @@ const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation }) => 
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
-          {['Edit', 'Settings', 'Info'].map((item, index) => (
+          {['Edit', 'Settings'].map((item, index) => (
             <Tab
               label={
                 <Typography variant="caption" fontWeight={'bold'}>
@@ -69,9 +68,6 @@ const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation }) => 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <SettingsTab lottie={lottie} setAnimation={setAnimation} />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <InfoTab />
       </CustomTabPanel>
     </Box>
   );
