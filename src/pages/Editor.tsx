@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import homeAnim from '../assets/home_anim.json';
-import Header from '../components/Header';
 import LayerList from '../components/LayerList';
 import PanelTab from '../components/PanelTab';
 import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import EditorHeader from '../components/EditorHeader';
 
 export interface LottieJson {
   v: string; // Version
@@ -23,6 +23,7 @@ function Editor() {
   const [animation, setAnimation] = useState<LottieJson | any>(originalAnimation);
   const [layersShown, setLayersShown] = useState(originalAnimation?.layers.map((_, index) => index));
   const [layersDeleted, setLayersDeleted] = useState(originalAnimation?.layers.map((_, index) => index));
+  const [animationHistory, setAnimationHistory] = useState<LottieJson[]>([]);
 
   const animRef = useRef<any>(null);
   const [lottieRef, setLottieRef] = useState<any>(null);
@@ -91,7 +92,7 @@ function Editor() {
 
   return (
     <>
-      <Header />
+      <EditorHeader />
       <Grid container spacing={2}>
         <Grid item xs={2.5}>
           <Box
