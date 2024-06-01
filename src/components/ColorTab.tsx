@@ -2,11 +2,12 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Popover, Typography } from '@mui/material';
 import { Layer } from './LayerList';
 import { LottieJson } from '../pages/Editor';
 import { useEffect, useState } from 'react';
-import { getColors } from '../helper/colorify';
+import { getColors, rgbToHex } from '../helper/colorify';
+import { SketchPicker } from 'react-color';
 
 interface ColorTabProps {
   lottie: LottieJson;
@@ -16,18 +17,27 @@ interface ColorTabProps {
 const ColorTab: React.FC<ColorTabProps> = ({ lottie, layers }) => {
   const [uniqueColors, setUniqueColors] = useState<number[][]>([]);
   const [allColors, setAllColors] = useState<number[][]>([]);
-  type NumberArray = number[];
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [selectedColor, setSelectedColor] = useState<number[]>([0, 0, 0]);
 
-  function removeDuplicateArrays(arrOfArrays: NumberArray[]): NumberArray[] {
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>, color: number[]) => {
+    setAnchorEl(event.currentTarget as HTMLButtonElement);
+    setSelectedColor(color);
+  };
+
+  function removeDuplicateArrays(arrOfArrays: number[][]): number[][] {
     // Convert each inner array to a JSON string
-    const map = new Map<string, NumberArray>();
-    arrOfArrays.forEach((arr: NumberArray) => {
+    const map = new Map<string, number[]>();
+    arrOfArrays.forEach((arr: number[]) => {
       const str = JSON.stringify(arr);
       map.set(str, arr);
     });
 
     // Convert the unique JSON strings back to arrays
-    const uniqueArrays: NumberArray[] = Array.from(map.values());
+    const uniqueArrays: number[][] = Array.from(map.values());
 
     return uniqueArrays;
   }
@@ -43,6 +53,8 @@ const ColorTab: React.FC<ColorTabProps> = ({ lottie, layers }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lottie]);
+
+  console.log(selectedColor && rgbToHex(selectedColor));
 
   return (
     <>
@@ -81,9 +93,23 @@ const ColorTab: React.FC<ColorTabProps> = ({ lottie, layers }) => {
                         borderColor: 'black',
                       },
                     }}
+                    onClick={(e) => handleClick(e, color)}
                   />
                 </Grid>
               ))}
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                elevation={1}
+              >
+                <SketchPicker color={rgbToHex(selectedColor)} />
+              </Popover>
             </Grid>
           </AccordionDetails>
         </Accordion>

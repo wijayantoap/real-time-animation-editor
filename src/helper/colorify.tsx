@@ -1,4 +1,4 @@
-// Taken from lottie-colorify with some modification
+// Note: Most of the functions are taken from lottie-colorify with some modification
 import { LottieJson } from '../pages/Editor';
 
 export const convertColorToLottieColor = (color: string | number[] | undefined) => {
@@ -130,4 +130,16 @@ export const getColors = function (lottieObj: LottieJson) {
   }
   doGet(lottieObj);
   return res;
+};
+
+export const rgbToHex = (rgb: number[]) => {
+  return (
+    '#' +
+    rgb
+      .map((component) => {
+        const hex = component.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      })
+      .join('')
+  );
 };
