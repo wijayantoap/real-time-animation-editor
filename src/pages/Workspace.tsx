@@ -8,8 +8,20 @@ import { Link, Navigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Player } from '@lottiefiles/react-lottie-player';
 import useSession from '../hooks/useSession';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import supabase from '../client/supabase';
+import { LottieJson } from './Editor';
+
+interface WorkspaceData {
+  id?: string;
+  name: string;
+  lottieObj: LottieJson;
+  isAllowEdit: boolean;
+  ownerId: string;
+  dateModified: Date;
+  history: any[];
+  collaborators: string[];
+}
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -25,21 +37,70 @@ const VisuallyHiddenInput = styled('input')({
 
 function Workspace() {
   const { data, loading } = useSession();
-  const [projects, setProjects] = useState([]); // todo: add type
+  const [projects, setProjects] = useState<WorkspaceData[]>([]);
 
   useEffect(() => {
     const fetchWorkspace = async () => {
-      const { data: projects, error } = await supabase.from('workspaces').select('*').eq('owner_id', data?.user?.id).single();
+      const { data: projects, error } = await supabase.from('workspaces').select('*').eq('ownerId', data?.user?.id);
 
-      if (error) {
-        console.error('Error fetching workspace:', error);
-      } else {
+      if (!error) {
         setProjects(projects);
       }
     };
 
     if (data?.user) fetchWorkspace();
   }, [data]);
+
+  const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const lottieObj = JSON.parse(reader.result as string);
+        await saveWorkspace(lottieObj);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const saveWorkspace = async (lottieObj: any) => {
+    try {
+      const newProject: WorkspaceData = {
+        name: lottieObj?.nm || 'Your exiting animation',
+        lottieObj: lottieObj,
+        ownerId: data?.user?.id || '',
+        dateModified: new Date(),
+        history: [],
+        collaborators: [],
+        isAllowEdit: false,
+      };
+      const { error } = await supabase.from('workspaces').insert(newProject);
+      if (error) {
+        console.error('Error saving workspace:', error);
+        alert('Something went wrong');
+        return;
+      }
+      setProjects((prevState) => [newProject, ...prevState]);
+    } catch (error: any) {
+      console.error('Error saving workspace:', error?.message);
+    }
+  };
+
+  const formatDate = (value: Date) => {
+    const date = new Date(value);
+
+    // Extract day, month, and year components
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Month is zero-based, so we add 1
+    const year = date.getFullYear();
+
+    // Format components into dd/mm/yyyy format
+    return `${day}/${month}/${year}`;
+  };
 
   if (!data?.user && !loading) return <Navigate to="/" />;
 
@@ -69,7 +130,7 @@ function Workspace() {
             </Button>
             <Button component="label" variant="contained" size="small" sx={{ fontWeight: 'bold' }} startIcon={<FileUploadOutlinedIcon />}>
               Upload animation
-              <VisuallyHiddenInput type="file" />
+              <VisuallyHiddenInput type="file" accept=".json" onChange={handleFileUpload} />
             </Button>
           </Box>
           <>
@@ -90,7 +151,7 @@ function Workspace() {
                       },
                     }}
                   >
-                    <Player autoplay loop src={homeAnim} style={{ width: '100%', height: 158 }} />
+                    <Player autoplay loop src={item?.lottieObj} style={{ width: '100%', height: 158 }} />
                     <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                       <FileOpenOutlinedIcon sx={{ color: 'primary.main' }} />
                       <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '80%', ml: 1 }}>
@@ -104,7 +165,7 @@ function Workspace() {
                             color: 'black',
                           }}
                         >
-                          Workspace name loooooooooong
+                          {item?.name}
                         </Typography>
                         <Typography
                           variant="caption"
@@ -116,7 +177,7 @@ function Workspace() {
                             color: 'gray',
                           }}
                         >
-                          Modified today
+                          Last modified {formatDate(item?.dateModified)}
                         </Typography>
                       </Box>
                     </Box>

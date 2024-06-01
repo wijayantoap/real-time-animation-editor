@@ -35,7 +35,7 @@ function Editor() {
     frame: 0,
   });
 
-  const { data } = useSession();
+  const { data, loading } = useSession();
 
   console.log(animation);
 
@@ -94,7 +94,7 @@ function Editor() {
     }
   }, [animation, layersShown, layersDeleted]);
 
-  if (!data?.user) return <Navigate to="/" />;
+  if (!data?.user && !loading) return <Navigate to="/" />;
 
   return (
     <>
