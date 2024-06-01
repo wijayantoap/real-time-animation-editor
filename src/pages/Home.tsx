@@ -5,10 +5,12 @@ import { useState } from 'react';
 import Header from '../components/Header';
 import { Player } from '@lottiefiles/react-lottie-player';
 import useSession from '../hooks/useSession';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const [open, setOpen] = useState(false);
 
+  const navigate = useNavigate();
   const { data } = useSession();
 
   return (
@@ -53,7 +55,7 @@ function Home() {
                 py: 1.5,
                 borderRadius: 4,
               }}
-              onClick={() => setOpen(true)}
+              onClick={() => (data?.user ? navigate('/workspace') : setOpen(true))}
             >
               {data ? 'Go to workspace' : "Join Now - It's Free"}
             </Button>
