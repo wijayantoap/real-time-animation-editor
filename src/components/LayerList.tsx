@@ -12,6 +12,7 @@ import RectangleRoundedIcon from '@mui/icons-material/RectangleRounded';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LayersIcon from '@mui/icons-material/Layers';
 
 // Define the type for a Layer object based on common Lottie properties
 export interface Layer {
@@ -31,13 +32,14 @@ export interface Shape {
 }
 
 interface LayerListProps {
+  name: string;
   layers: Layer[];
   layersShown: number[];
   hideLayer: (show: boolean, index: number) => void;
   deleteLayer: (index: number) => void;
 }
 
-const LayerList: React.FC<LayerListProps> = ({ layers, layersShown, hideLayer, deleteLayer }) => {
+const LayerList: React.FC<LayerListProps> = ({ name, layers, layersShown, hideLayer, deleteLayer }) => {
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -74,7 +76,7 @@ const LayerList: React.FC<LayerListProps> = ({ layers, layersShown, hideLayer, d
         <ListItemIcon>
           <RectangleRoundedIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
         </ListItemIcon>
-        <ListItemText primary="Main" />
+        <ListItemText primary={name || 'Main'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -84,7 +86,7 @@ const LayerList: React.FC<LayerListProps> = ({ layers, layersShown, hideLayer, d
             return (
               <ListItemButton disableRipple key={index} sx={{ pl: 4 }}>
                 <ListItemIcon>
-                  <RectangleRoundedIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
+                  <LayersIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
                 </ListItemIcon>
                 <ListItemText primary={item?.nm} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} />
                 <IconButton size="small" onClick={() => hideLayer(isShown, index)}>

@@ -101,7 +101,13 @@ function Editor() {
               minWidth: 300,
             }}
           >
-            <LayerList layers={originalAnimation?.layers} layersShown={layersShown} hideLayer={hideLayer} deleteLayer={deleteLayer} />
+            <LayerList
+              name={animation.nm}
+              layers={originalAnimation?.layers}
+              layersShown={layersShown}
+              hideLayer={hideLayer}
+              deleteLayer={deleteLayer}
+            />
           </Box>
         </Grid>
         <Grid item xs={7}>
