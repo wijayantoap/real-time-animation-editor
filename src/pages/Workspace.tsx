@@ -8,6 +8,8 @@ import { Link, Navigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Player } from '@lottiefiles/react-lottie-player';
 import useSession from '../hooks/useSession';
+import { useEffect, useState } from 'react';
+import supabase from '../client/supabase';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -22,9 +24,24 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 function Workspace() {
-  const { data } = useSession();
+  const { data, loading } = useSession();
+  const [projects, setProjects] = useState([]); // todo: add type
 
-  if (!data?.user) return <Navigate to="/" />;
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      const { data: projects, error } = await supabase.from('workspaces').select('*').eq('owner_id', data?.user?.id).single();
+
+      if (error) {
+        console.error('Error fetching workspace:', error);
+      } else {
+        setProjects(projects);
+      }
+    };
+
+    if (data?.user) fetchWorkspace();
+  }, [data]);
+
+  if (!data?.user && !loading) return <Navigate to="/" />;
 
   return (
     <Box sx={{ backgroundColor: '#F3F6F8', minHeight: '100vh' }}>
@@ -57,7 +74,7 @@ function Workspace() {
           </Box>
           <>
             <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 10].map((item, index) => (
+              {projects?.map((item, index) => (
                 <Grid item key={index} component={Link} to={'/workspace/123'} sx={{ textDecoration: 'none' }}>
                   <Box
                     sx={{
