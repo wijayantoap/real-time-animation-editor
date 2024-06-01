@@ -1,6 +1,46 @@
 // Note: Most of the functions are taken from lottie-colorify with some modification
 import { LottieJson } from '../pages/Editor';
 
+export const colorify = (destColors: (string | number[] | undefined)[] = [], lottieObj: any, immutable = true) => {
+  const modifiedColors = [];
+  for (const color of destColors) {
+    modifiedColors.push(convertColorToLottieColor(color));
+  }
+
+  const newLottie = modifyColors(modifiedColors, immutable ? cloneDeep(lottieObj) : lottieObj);
+  return newLottie;
+};
+
+const modifyColors = (colorsArray: any, lottieObj: any) => {
+  let i = 0;
+  function doModify(colors: any, obj: any) {
+    if (obj?.s && Array.isArray(obj?.s) && obj?.s.length === 4) {
+      if (colors[i]) {
+        obj.s = [...colors[i], 1];
+      }
+      i++;
+    } else if (obj?.c && obj?.c.k) {
+      if (Array.isArray(obj.c.k) && typeof obj.c.k[0] !== 'number') {
+        doModify(colors, obj.c.k);
+      } else {
+        if (colors[i]) {
+          obj.c.k = colors[i];
+        }
+        i++;
+      }
+    }
+
+    for (const key in obj) {
+      if (typeof obj[key] === 'object') {
+        doModify(colors, obj[key]);
+      }
+    }
+
+    return obj;
+  }
+  return doModify(colorsArray, lottieObj);
+};
+
 export const convertColorToLottieColor = (color: string | number[] | undefined) => {
   if (typeof color === 'string' && color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
@@ -40,74 +80,18 @@ const cloneDeep = (obj: any): any => {
   return clonedObj;
 };
 
-export const replaceFirstColor = (sourceColor: string | number[], targetColor: string | number[], lottieObj: any, immutable = true) => {
+export const replaceColor = (sourceColor: string | number[], targetColor: string | number[], lottieObj: any, immutable = true) => {
   const genSourceLottieColor = convertColorToLottieColor(sourceColor);
   const genTargetLottieColor = convertColorToLottieColor(targetColor);
   if (!genSourceLottieColor || !genTargetLottieColor) {
     throw new Error('Proper colors must be used for both source and target');
   }
-
-  let replacementDone = false;
-
   function doReplace(sourceLottieColor: number[], targetLottieColor: number[], obj: any) {
-    if (replacementDone) return obj;
-
-    if (obj?.s?.length === 4) {
+    if (obj?.s && Array.isArray(obj?.s) && obj?.s?.length === 4) {
       if (sourceLottieColor[0] === obj.s[0] && sourceLottieColor[1] === obj.s[1] && sourceLottieColor[2] === obj.s[2]) {
         obj.s = [...targetLottieColor, 1];
-        replacementDone = true;
       }
-    } else if (Array.isArray(obj?.c?.k)) {
-      if (typeof obj.c.k[0] !== 'number') {
-        doReplace(sourceLottieColor, targetLottieColor, obj.c.k);
-      } else if (
-        sourceLottieColor[0] === round(obj.c.k[0]) &&
-        sourceLottieColor[1] === round(obj.c.k[1]) &&
-        sourceLottieColor[2] === round(obj.c.k[2])
-      ) {
-        obj.c.k = targetLottieColor;
-        replacementDone = true;
-      }
-    } else {
-      for (const key in obj) {
-        if (typeof obj[key] === 'object') {
-          doReplace(sourceLottieColor, targetLottieColor, obj[key]);
-          if (replacementDone) break;
-        }
-      }
-    }
-
-    return obj;
-  }
-
-  return doReplace(genSourceLottieColor, genTargetLottieColor, immutable ? cloneDeep(lottieObj) : lottieObj);
-};
-
-export const replaceColor = (
-  sourceColor: string | number[],
-  targetColor: string | number[],
-  lottieObj: any,
-  index: number | null = null,
-  immutable = true,
-) => {
-  const genSourceLottieColor = convertColorToLottieColor(sourceColor);
-  const genTargetLottieColor = convertColorToLottieColor(targetColor);
-  if (!genSourceLottieColor || !genTargetLottieColor) {
-    throw new Error('Proper colors must be used for both source and target');
-  }
-
-  function doReplace(sourceLottieColor: number[], targetLottieColor: number[], obj: any) {
-    if (obj?.s?.length === 4) {
-      if (sourceLottieColor[0] === obj.s[0] && sourceLottieColor[1] === obj.s[1] && sourceLottieColor[2] === obj.s[2]) {
-        if (index === null) {
-          obj.s = [...targetLottieColor, 1];
-        } else if (index === 0) {
-          obj.s = [...targetLottieColor, 1];
-        } else {
-          index--; // Decrement index if color matches and index is provided
-        }
-      }
-    } else if (obj?.c?.k) {
+    } else if (obj?.c && obj?.c?.k) {
       if (Array.isArray(obj.c.k) && typeof obj.c.k[0] !== 'number') {
         doReplace(sourceLottieColor, targetLottieColor, obj.c.k);
       } else if (
@@ -115,17 +99,11 @@ export const replaceColor = (
         sourceLottieColor[1] === round(obj.c.k[1]) &&
         sourceLottieColor[2] === round(obj.c.k[2])
       ) {
-        if (index === null) {
-          obj.c.k = targetLottieColor;
-        } else if (index === 0) {
-          obj.c.k = targetLottieColor;
-        } else {
-          index--; // Decrement index if color matches and index is provided
-        }
+        obj.c.k = targetLottieColor;
       }
     } else {
       for (const key in obj) {
-        if (typeof obj[key] === 'object' && obj[key] !== null) {
+        if (typeof obj[key] === 'object') {
           doReplace(sourceLottieColor, targetLottieColor, obj[key]);
         }
       }
@@ -133,14 +111,7 @@ export const replaceColor = (
 
     return obj;
   }
-
-  // Make a deep clone if immutable is true
-  const modifiedLottie = immutable ? cloneDeep(lottieObj) : lottieObj;
-
-  // Call the recursive function to replace the color at the specified index or all occurrences
-  doReplace(genSourceLottieColor, genTargetLottieColor, modifiedLottie);
-
-  return modifiedLottie;
+  return doReplace(genSourceLottieColor, genTargetLottieColor, immutable ? cloneDeep(lottieObj) : lottieObj);
 };
 
 const round = (n: number) => Math.round(n * 1000) / 1000;

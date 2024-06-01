@@ -6,7 +6,7 @@ import { Box, Divider, Grid, Popover, Typography } from '@mui/material';
 import { Layer } from './LayerList';
 import { LottieJson } from '../pages/Editor';
 import { useEffect, useState } from 'react';
-import { getColors, replaceColor, replaceFirstColor, rgbToHex } from '../helper/colorify';
+import { colorify, getColors, replaceColor, rgbToHex } from '../helper/colorify';
 import { SketchPicker } from 'react-color';
 
 interface ColorTabProps {
@@ -118,7 +118,9 @@ const ColorTab: React.FC<ColorTabProps> = ({ lottie, setAnimation }) => {
           color={typeof selectedColor === 'string' ? selectedColor : rgbToHex(selectedColor)}
           onChangeComplete={(color) => {
             if (selectedIndex) {
-              setAnimation(replaceFirstColor(selectedColor, color.hex, lottie));
+              const colors = getColors(lottie);
+              colors[selectedIndex] = [color.rgb.r, color.rgb.g, color.rgb.b];
+              setAnimation(colorify(colors, lottie));
             } else {
               setAnimation(replaceColor(selectedColor, color.hex, lottie));
             }
