@@ -9,6 +9,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface LottieJson {
   v: string; // Version
+  w: number; // Width
+  h: number; // Height
   fr: number; // Frame rate
   ip: number; // In point
   op: number; // Out point
@@ -29,6 +31,8 @@ function Editor() {
     isPaused: false,
     frame: 0,
   });
+
+  console.log(animation);
 
   const hideLayer = (hide: boolean, index: number) => {
     setLayersShown((prevLayersShown) => {
@@ -116,7 +120,7 @@ function Editor() {
               loop
               src={animation}
               onEvent={handleLottieEvent}
-              style={{ height: 500, width: '100%' }}
+              style={{ height: '100%', width: '100%' }}
             >
               <Controls visible={true} buttons={['play', 'repeat', 'frame', 'debug']} />
             </Player>

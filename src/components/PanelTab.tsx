@@ -68,7 +68,7 @@ const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation }) => 
         <ColorTab lottie={lottie} layers={layers} setAnimation={setAnimation} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SettingsTab />
+        <SettingsTab lottie={lottie} setAnimation={setAnimation} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <InfoTab />

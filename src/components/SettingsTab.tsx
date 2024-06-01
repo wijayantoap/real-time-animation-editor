@@ -1,9 +1,30 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Typography } from '@mui/material';
+import { LottieJson } from '../pages/Editor';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 
-export default function SettingsTab() {
+interface SettingsTabProps {
+  lottie: LottieJson;
+  setAnimation: Dispatch<SetStateAction<LottieJson>>;
+}
+
+const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
+  const [width, setWidth] = useState<number>(lottie?.w);
+  const [height, setHeight] = useState<number>(lottie?.h);
+  const [duration, setDuration] = useState<number>(lottie?.op);
+  const [frameRate, setFrameRate] = useState<number>(lottie?.fr);
+
+  const changeAnimState = () => {
+    setAnimation((prevState) => ({
+      ...prevState,
+      w: width,
+      h: height,
+      op: duration,
+      fr: frameRate,
+    }));
+  };
+
   return (
     <Box
       component="form"
@@ -25,19 +46,23 @@ export default function SettingsTab() {
       >
         <Typography sx={{ mr: 2, fontSize: 12, letterSpacing: 1, flex: 1 }}>Dimension</Typography>
         <TextField
-          id="outlined-basic"
+          value={width}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setWidth(parseInt(event.target.value))}
           variant="outlined"
           size="small"
           sx={{ mr: 1, '& .MuiInputBase-input': { fontSize: 12, height: 8, padding: 1 } }}
+          type="number"
           InputProps={{
             startAdornment: <Typography variant="caption">w</Typography>,
           }}
         />
         <TextField
-          id="outlined-basic"
+          value={height}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setHeight(parseInt(event.target.value))}
           variant="outlined"
           size="small"
           sx={{ '& .MuiInputBase-input': { fontSize: 12, height: 8, padding: 1 } }}
+          type="number"
           InputProps={{
             startAdornment: <Typography variant="caption">h</Typography>,
           }}
@@ -51,7 +76,14 @@ export default function SettingsTab() {
         }}
       >
         <Typography sx={{ mr: 2, fontSize: 12, letterSpacing: 1, flex: 1 }}>Duration</Typography>
-        <TextField id="outlined-basic" variant="outlined" size="small" sx={{ '& .MuiInputBase-input': { fontSize: 12, height: 8, padding: 1 } }} />
+        <TextField
+          value={duration}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setDuration(parseInt(event.target.value))}
+          variant="outlined"
+          size="small"
+          type="number"
+          sx={{ '& .MuiInputBase-input': { fontSize: 12, height: 8, padding: 1 } }}
+        />
       </Box>
       <Box
         sx={{
@@ -61,11 +93,27 @@ export default function SettingsTab() {
         }}
       >
         <Typography sx={{ mr: 2, fontSize: 12, letterSpacing: 1, flex: 1 }}>Frame rate</Typography>
-        <TextField id="outlined-basic" variant="outlined" size="small" sx={{ '& .MuiInputBase-input': { fontSize: 12, height: 8, padding: 1 } }} />
+        <TextField
+          value={frameRate}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setFrameRate(parseInt(event.target.value))}
+          variant="outlined"
+          size="small"
+          sx={{ '& .MuiInputBase-input': { fontSize: 12, height: 8, padding: 1 } }}
+          type="number"
+        />
       </Box>
-      <Button variant="outlined" fullWidth size="small" sx={{ borderRadius: 2 }}>
+      <Button
+        onClick={changeAnimState}
+        variant="outlined"
+        fullWidth
+        size="small"
+        sx={{ borderRadius: 2 }}
+        disabled={!width || !height || !frameRate || !duration}
+      >
         Update
       </Button>
     </Box>
   );
-}
+};
+
+export default SettingsTab;
