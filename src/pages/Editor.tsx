@@ -134,7 +134,7 @@ function Editor() {
               minWidth: 300,
             }}
           >
-            <PanelTab lottie={originalAnimation} layers={originalAnimation?.layers} />
+            <PanelTab lottie={animation} layers={animation?.layers} />
           </Box>
         </Grid>
       </Grid>
