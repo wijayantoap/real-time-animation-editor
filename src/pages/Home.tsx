@@ -4,9 +4,12 @@ import FormDialog from '../components/FormDialog';
 import { useState } from 'react';
 import Header from '../components/Header';
 import { Player } from '@lottiefiles/react-lottie-player';
+import useSession from '../hooks/useSession';
 
 function Home() {
   const [open, setOpen] = useState(false);
+
+  const { data } = useSession();
 
   return (
     <>
@@ -52,7 +55,7 @@ function Home() {
               }}
               onClick={() => setOpen(true)}
             >
-              Join Now - It's Free
+              {data ? 'Go to workspace' : "Join Now - It's Free"}
             </Button>
           </Box>
           <Box

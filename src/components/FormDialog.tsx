@@ -4,7 +4,9 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { Divider, Typography } from '@mui/material';
+import { Alert, Box, Divider, Typography } from '@mui/material';
+import supabase from '../client/supabase';
+import { useNavigate } from 'react-router-dom';
 
 interface FormDialogProps {
   open: boolean;
@@ -13,9 +15,35 @@ interface FormDialogProps {
 
 const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
   const [isLogin, setIsLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const signUpNewUser = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    handleAuth(data, error);
+  };
+
+  const signInWithEmail = async (email: string, password: string) => {
+    setError('');
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    handleAuth(data, error);
+  };
+
+  const handleAuth = (data: any, error: any) => {
+    if (data?.user) navigate('/workspace');
+    if (error) setError(error?.message || 'Something went wrong');
+    setLoading(false);
   };
 
   return (
@@ -27,11 +55,17 @@ const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
           component: 'form',
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
+            setLoading(true);
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             const email = formJson.email;
+            const password = formJson.password;
             console.log(email);
-            handleClose();
+            if (isLogin) {
+              signInWithEmail(email, password);
+            } else {
+              signUpNewUser(email, password);
+            }
           },
           sx: { borderRadius: 4 },
         }}
@@ -51,6 +85,10 @@ const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
             fullWidth
             variant="outlined"
             InputProps={{ sx: { borderRadius: 2 } }}
+            onChange={() => {
+              setError('');
+              setLoading(false);
+            }}
           />
           <TextField
             autoFocus
@@ -63,20 +101,42 @@ const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
             fullWidth
             variant="outlined"
             InputProps={{ sx: { borderRadius: 2 } }}
+            onChange={() => {
+              setError('');
+              setLoading(false);
+            }}
           />
           <DialogActions>
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
+            <Box
               sx={{
-                borderRadius: 4,
-                fontSize: 16,
-                fontWeight: 'bold',
+                width: '100%',
               }}
             >
-              {isLogin ? 'Log in' : 'Sign up'}
-            </Button>
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                sx={{
+                  borderRadius: 4,
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}
+                disabled={loading}
+              >
+                {isLogin ? 'Log in' : 'Sign up'}
+              </Button>
+              {error && (
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  {error}
+                </Alert>
+              )}
+            </Box>
           </DialogActions>
           <Divider sx={{ my: 2 }} />
           <Typography color={'gray'} align="center">

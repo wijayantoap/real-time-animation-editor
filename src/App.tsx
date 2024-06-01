@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home';
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Featured from './pages/Featured';

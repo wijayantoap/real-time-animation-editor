@@ -12,17 +12,20 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import supabase from '../client/supabase';
+import useSession from '../hooks/useSession';
 
-const pages = [
-  { title: 'Featured', to: '/featured' },
-  { title: 'Workspace', to: '/workspace' },
-];
-const settings = ['Profile', 'Logout'];
+const pages = [{ title: 'Featured', to: '/featured' }];
+
+const protectedPages = [{ title: 'Workspace', to: '/workspace' }];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+
+  const { data } = useSession();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -37,6 +40,17 @@ function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleClick = async () => {
+    if (data?.user) {
+      const { error } = await supabase.auth.signOut();
+      if (error) alert('Something went wrong');
+      navigate('/');
+    } else {
+      navigate('/'); // Todo: use redux to show form
+    }
+    handleCloseUserMenu();
   };
 
   return (
@@ -127,7 +141,7 @@ function Header() {
             RottieEditor
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {[...pages, ...(data?.user ? protectedPages : [])].map((page) => (
               <Button key={page.title} onClick={handleCloseNavMenu} component={Link} to={page.to} sx={{ my: 2, color: 'gray', display: 'block' }}>
                 {page.title}
               </Button>
@@ -156,11 +170,9 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleClick}>
+                <Typography textAlign="center">{data ? 'Log out' : 'Sign in'}</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
