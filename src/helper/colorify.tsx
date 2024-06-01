@@ -40,11 +40,54 @@ const cloneDeep = (obj: any): any => {
   return clonedObj;
 };
 
-export const replaceColorAtIndex = (
-  index: number,
+export const replaceFirstColor = (sourceColor: string | number[], targetColor: string | number[], lottieObj: any, immutable = true) => {
+  const genSourceLottieColor = convertColorToLottieColor(sourceColor);
+  const genTargetLottieColor = convertColorToLottieColor(targetColor);
+  if (!genSourceLottieColor || !genTargetLottieColor) {
+    throw new Error('Proper colors must be used for both source and target');
+  }
+
+  let replacementDone = false;
+
+  function doReplace(sourceLottieColor: number[], targetLottieColor: number[], obj: any) {
+    if (replacementDone) return obj;
+
+    if (obj?.s?.length === 4) {
+      if (sourceLottieColor[0] === obj.s[0] && sourceLottieColor[1] === obj.s[1] && sourceLottieColor[2] === obj.s[2]) {
+        obj.s = [...targetLottieColor, 1];
+        replacementDone = true;
+      }
+    } else if (Array.isArray(obj?.c?.k)) {
+      if (typeof obj.c.k[0] !== 'number') {
+        doReplace(sourceLottieColor, targetLottieColor, obj.c.k);
+      } else if (
+        sourceLottieColor[0] === round(obj.c.k[0]) &&
+        sourceLottieColor[1] === round(obj.c.k[1]) &&
+        sourceLottieColor[2] === round(obj.c.k[2])
+      ) {
+        obj.c.k = targetLottieColor;
+        replacementDone = true;
+      }
+    } else {
+      for (const key in obj) {
+        if (typeof obj[key] === 'object') {
+          doReplace(sourceLottieColor, targetLottieColor, obj[key]);
+          if (replacementDone) break;
+        }
+      }
+    }
+
+    return obj;
+  }
+
+  return doReplace(genSourceLottieColor, genTargetLottieColor, immutable ? cloneDeep(lottieObj) : lottieObj);
+};
+
+export const replaceColor = (
   sourceColor: string | number[],
   targetColor: string | number[],
   lottieObj: any,
+  index: number | null = null,
   immutable = true,
 ) => {
   const genSourceLottieColor = convertColorToLottieColor(sourceColor);
@@ -54,16 +97,17 @@ export const replaceColorAtIndex = (
   }
 
   function doReplace(sourceLottieColor: number[], targetLottieColor: number[], obj: any) {
-    if (obj.s && Array.isArray(obj.s) && obj.s.length === 4) {
+    if (obj?.s?.length === 4) {
       if (sourceLottieColor[0] === obj.s[0] && sourceLottieColor[1] === obj.s[1] && sourceLottieColor[2] === obj.s[2]) {
-        if (index === 0) {
-          // Check if index is 0
+        if (index === null) {
+          obj.s = [...targetLottieColor, 1];
+        } else if (index === 0) {
           obj.s = [...targetLottieColor, 1];
         } else {
-          index--; // Decrement index if color doesn't match
+          index--; // Decrement index if color matches and index is provided
         }
       }
-    } else if (obj.c && obj.c.k) {
+    } else if (obj?.c?.k) {
       if (Array.isArray(obj.c.k) && typeof obj.c.k[0] !== 'number') {
         doReplace(sourceLottieColor, targetLottieColor, obj.c.k);
       } else if (
@@ -71,16 +115,17 @@ export const replaceColorAtIndex = (
         sourceLottieColor[1] === round(obj.c.k[1]) &&
         sourceLottieColor[2] === round(obj.c.k[2])
       ) {
-        if (index === 0) {
-          // Check if index is 0
+        if (index === null) {
+          obj.c.k = targetLottieColor;
+        } else if (index === 0) {
           obj.c.k = targetLottieColor;
         } else {
-          index--; // Decrement index if color doesn't match
+          index--; // Decrement index if color matches and index is provided
         }
       }
     } else {
       for (const key in obj) {
-        if (typeof obj[key] === 'object') {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
           doReplace(sourceLottieColor, targetLottieColor, obj[key]);
         }
       }
@@ -92,7 +137,7 @@ export const replaceColorAtIndex = (
   // Make a deep clone if immutable is true
   const modifiedLottie = immutable ? cloneDeep(lottieObj) : lottieObj;
 
-  // Call the recursive function to replace the color at the specified index
+  // Call the recursive function to replace the color at the specified index or all occurrences
   doReplace(genSourceLottieColor, genTargetLottieColor, modifiedLottie);
 
   return modifiedLottie;

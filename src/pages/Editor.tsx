@@ -17,7 +17,7 @@ export interface LottieJson {
 
 function Editor() {
   const [originalAnimation, setOriginalAnimation] = useState(homeAnim);
-  const [animation, setAnimation] = useState(originalAnimation);
+  const [animation, setAnimation] = useState<LottieJson | any>(originalAnimation);
   const [layersShown, setLayersShown] = useState(originalAnimation?.layers.map((_, index) => index));
   const [layersDeleted, setLayersDeleted] = useState(originalAnimation?.layers.map((_, index) => index));
 
@@ -29,7 +29,7 @@ function Editor() {
     frame: 0,
   });
 
-  console.log(originalAnimation);
+  // console.log(originalAnimation);
 
   const hideLayer = (hide: boolean, index: number) => {
     setCurrentFrame({
@@ -67,14 +67,14 @@ function Editor() {
   useEffect(() => {
     // Filter animation.layers based on layersShown changes
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersShown.includes(index));
-    setAnimation((prevAnimation) => ({ ...prevAnimation, layers: filteredLayers }));
+    setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersShown]);
 
   useEffect(() => {
     // Filter animation.layers based on layersShown changes
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersDeleted.includes(index));
-    setAnimation((prevAnimation) => ({ ...prevAnimation, layers: filteredLayers }));
+    setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
     setOriginalAnimation((prevAnimation) => ({ ...prevAnimation, layers: filteredLayers }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersDeleted]);
@@ -134,7 +134,7 @@ function Editor() {
               minWidth: 300,
             }}
           >
-            <PanelTab lottie={animation} layers={animation?.layers} />
+            <PanelTab lottie={animation} setAnimation={setAnimation} layers={animation?.layers} />
           </Box>
         </Grid>
       </Grid>

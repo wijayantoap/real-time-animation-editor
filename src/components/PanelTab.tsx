@@ -35,9 +35,10 @@ function a11yProps(index: number) {
 interface PanelTabProps {
   lottie: LottieJson;
   layers: Layer[];
+  setAnimation: React.Dispatch<React.SetStateAction<LottieJson>>;
 }
 
-const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers }) => {
+const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -64,7 +65,7 @@ const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers }) => {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <ColorTab lottie={lottie} layers={layers} />
+        <ColorTab lottie={lottie} layers={layers} setAnimation={setAnimation} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <SettingsTab />
