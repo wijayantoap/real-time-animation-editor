@@ -47,9 +47,10 @@ function Featured() {
               <Grid container sx={{ flex: 1, my: 4, justifyContent: 'center' }} spacing={2}>
                 {data?.featuredPublicAnimations?.edges?.map(
                   (
-                    item: any, // TODO: Change to ts type
+                    item: any, // TODO: Change to ts type,
+                    index: number,
                   ) => (
-                    <Grid item>
+                    <Grid item key={index}>
                       <Box onClick={() => setOpen(true)}>
                         <Player
                           autoplay

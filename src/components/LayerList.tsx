@@ -14,13 +14,22 @@ import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 // Define the type for a Layer object based on common Lottie properties
-interface Layer {
+export interface Layer {
   nm: string; // name
   ty: number; // type
   st: number; // start frame
   op: number; // end frame
   [key: string]: any; // to allow other properties that we may not explicitly define
+  shapes: Shape[];
 }
+
+export interface Shape {
+  ty: string;
+  c?: {
+    k: number[];
+  };
+}
+
 interface LayerListProps {
   layers: Layer[];
   layersShown: number[];
@@ -73,7 +82,7 @@ const LayerList: React.FC<LayerListProps> = ({ layers, layersShown, hideLayer, d
           {layers?.map((item, index) => {
             const isShown = layersShown.includes(index);
             return (
-              <ListItemButton disableRipple sx={{ pl: 4 }}>
+              <ListItemButton disableRipple key={index} sx={{ pl: 4 }}>
                 <ListItemIcon>
                   <RectangleRoundedIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
                 </ListItemIcon>

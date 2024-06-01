@@ -52,8 +52,8 @@ function Workspace() {
           </Box>
           <>
             <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 10].map((item) => (
-                <Grid item component={Link} to={'/workspace/123'} sx={{ textDecoration: 'none' }}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 10].map((item, index) => (
+                <Grid item key={index} component={Link} to={'/workspace/123'} sx={{ textDecoration: 'none' }}>
                   <Box
                     sx={{
                       width: 214,

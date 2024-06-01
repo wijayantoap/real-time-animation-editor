@@ -6,6 +6,15 @@ import PanelTab from '../components/PanelTab';
 import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+export interface LottieJson {
+  v: string; // Version
+  fr: number; // Frame rate
+  ip: number; // In point
+  op: number; // Out point
+  assets: any[]; // Assets used in the animation
+  layers: any[]; // Layers of the animation
+}
+
 function Editor() {
   const [originalAnimation, setOriginalAnimation] = useState(homeAnim);
   const [animation, setAnimation] = useState(originalAnimation);
@@ -19,6 +28,8 @@ function Editor() {
     isPaused: false,
     frame: 0,
   });
+
+  console.log(originalAnimation);
 
   const hideLayer = (hide: boolean, index: number) => {
     setCurrentFrame({
@@ -69,14 +80,11 @@ function Editor() {
   }, [layersDeleted]);
 
   useEffect(() => {
-    console.log(lottieRef?.isPaused);
     if (lottieRef && loaded && currentFrame) {
       if (currentFrame?.isPaused) {
         lottieRef.goToAndStop(currentFrame?.frame, true);
-        console.log('goToAndStop');
       } else {
         lottieRef.goToAndPlay(currentFrame?.frame, true);
-        console.log('goToAndPlay');
       }
     }
   }, [lottieRef, loaded, currentFrame]);
@@ -126,7 +134,7 @@ function Editor() {
               minWidth: 300,
             }}
           >
-            <PanelTab />
+            <PanelTab lottie={originalAnimation} layers={originalAnimation?.layers} />
           </Box>
         </Grid>
       </Grid>

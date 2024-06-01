@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import ColorTab from './ColorTab';
 import SettingsTab from './SettingsTab';
 import InfoTab from './IntoTab';
+import { Layer } from './LayerList';
+import { LottieJson } from '../pages/Editor';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,7 +32,12 @@ function a11yProps(index: number) {
   };
 }
 
-export default function PanelTab() {
+interface PanelTabProps {
+  lottie: LottieJson;
+  layers: Layer[];
+}
+
+const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -48,6 +55,7 @@ export default function PanelTab() {
                   {item}
                 </Typography>
               }
+              key={index}
               sx={{ p: 2, minWidth: 0 }}
               {...a11yProps(index)}
               disableRipple
@@ -56,7 +64,7 @@ export default function PanelTab() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <ColorTab />
+        <ColorTab lottie={lottie} layers={layers} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <SettingsTab />
@@ -66,4 +74,6 @@ export default function PanelTab() {
       </CustomTabPanel>
     </Box>
   );
-}
+};
+
+export default PanelTab;
