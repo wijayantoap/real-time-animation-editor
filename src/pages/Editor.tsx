@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, Grid } from '@mui/material';
 import homeAnim from '../assets/home_anim.json';
 import Header from '../components/Header';
@@ -29,13 +30,7 @@ function Editor() {
     frame: 0,
   });
 
-  // console.log(originalAnimation);
-
   const hideLayer = (hide: boolean, index: number) => {
-    setCurrentFrame({
-      isPaused: lottieRef?.isPaused,
-      frame: lottieRef?.currentFrame,
-    });
     setLayersShown((prevLayersShown) => {
       if (hide) {
         return prevLayersShown.filter((layerIndex) => layerIndex !== index);
@@ -50,10 +45,6 @@ function Editor() {
   };
 
   const deleteLayer = (index: number) => {
-    setCurrentFrame({
-      isPaused: lottieRef?.isPaused,
-      frame: lottieRef?.currentFrame,
-    });
     setLayersDeleted((prevLayersDeleted) => prevLayersDeleted.filter((layerIndex) => layerIndex !== index));
   };
 
@@ -65,18 +56,14 @@ function Editor() {
   );
 
   useEffect(() => {
-    // Filter animation.layers based on layersShown changes
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersShown.includes(index));
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersShown]);
 
   useEffect(() => {
-    // Filter animation.layers based on layersShown changes
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersDeleted.includes(index));
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
     setOriginalAnimation((prevAnimation) => ({ ...prevAnimation, layers: filteredLayers }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layersDeleted]);
 
   useEffect(() => {
@@ -88,6 +75,15 @@ function Editor() {
       }
     }
   }, [lottieRef, loaded, currentFrame]);
+
+  useEffect(() => {
+    if (lottieRef) {
+      setCurrentFrame({
+        isPaused: lottieRef?.isPaused,
+        frame: lottieRef?.currentFrame,
+      });
+    }
+  }, [animation, layersShown, layersDeleted]);
 
   return (
     <>
