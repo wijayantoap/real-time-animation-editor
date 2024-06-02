@@ -63,6 +63,7 @@ function Featured() {
           history: [],
           collaborators: [],
           isAllowEdit: false,
+          lastModifiedBy: userData?.user?.id || '',
         };
         const { error } = await supabase.from('workspaces').insert(newProject);
         if (error) {

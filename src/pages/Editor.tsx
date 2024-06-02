@@ -8,6 +8,7 @@ import EditorHeader from '../components/EditorHeader';
 import { Navigate, useParams } from 'react-router-dom';
 import useSession from '../hooks/useSession';
 import supabase from '../client/supabase';
+import { WorkspaceData } from './Workspace';
 
 export interface LottieJson {
   v: string; // Version
@@ -38,15 +39,11 @@ function Editor() {
 
   const { data, loading } = useSession();
   let params = useParams();
+  const workspaceId = params?.workspaceId;
 
   useEffect(() => {
     const fetchAnimation = async () => {
-      const { data: project, error } = await supabase
-        .from('workspaces')
-        .select('*')
-        .eq('ownerId', data?.user?.id)
-        .eq('id', params?.workspaceId)
-        .single();
+      const { data: project, error } = await supabase.from('workspaces').select('*').eq('id', workspaceId).single();
 
       const lottieObj = project?.lottieObj;
 
@@ -60,10 +57,10 @@ function Editor() {
       if (error) setError(true);
     };
 
-    if (params?.workspaceId && data?.user?.id) {
+    if (workspaceId && data?.user?.id) {
       fetchAnimation();
     }
-  }, [params?.workspaceId, data?.user?.id]);
+  }, [workspaceId, data?.user?.id]);
 
   const hideLayer = (hide: boolean, index: number) => {
     setLayersShown((prevLayersShown) => {
@@ -89,6 +86,32 @@ function Editor() {
     },
     [setLoaded],
   );
+
+  const updateWorkspace = async (lottieObj: any) => {
+    try {
+      const newProject: WorkspaceData = {
+        name: lottieObj?.nm || 'Your exciting animation',
+        lottieObj: lottieObj,
+        ownerId: data?.user?.id || '',
+        dateModified: new Date(),
+        history: [],
+        collaborators: [],
+        isAllowEdit: false,
+        lastModifiedBy: data?.user?.id || '',
+      };
+
+      // Update existing workspace
+      const { error } = await supabase.from('workspaces').update(newProject).eq('id', workspaceId).select();
+
+      if (error) {
+        console.error('Error updating workspace:', error);
+        alert('Something went wrong');
+        return;
+      }
+    } catch (error: any) {
+      console.error('Error saving workspace:', error?.message);
+    }
+  };
 
   useEffect(() => {
     if (!originalAnimation) return;
@@ -121,6 +144,49 @@ function Editor() {
       });
     }
   }, [animation, layersShown, layersDeleted]);
+
+  useEffect(() => {
+    const channel = supabase.channel('table_workspaces_changes');
+
+    const subscribeToMessages = () => {
+      channel
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'workspaces',
+            filter: `id=eq.${params?.workspaceId}`,
+          },
+          (payload) => {
+            const newRecord = payload.new as any;
+            console.log(newRecord);
+            console.log('compare', newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id);
+            console.log('compare', newRecord?.lastModifiedBy, data?.user?.id);
+            // todo: currently infinite
+
+            // if (newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id) {
+            //   const lottieObj = newRecord?.lottieObj;
+            //   setAnimation(lottieObj);
+            //   setOriginalAnimation(lottieObj);
+            //   setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
+            //   setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
+            // }
+          },
+        )
+        .subscribe();
+
+      console.log(supabase.realtime.connectionState());
+    };
+
+    if (params?.workspaceId && data?.user?.id) {
+      subscribeToMessages();
+    }
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [params?.workspaceId, data?.user?.id]);
 
   if (!data?.user && !loading) return <Navigate to="/" />;
 

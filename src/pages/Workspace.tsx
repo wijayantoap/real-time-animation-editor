@@ -21,6 +21,7 @@ export interface WorkspaceData {
   dateModified: Date;
   history: any[];
   collaborators: string[];
+  lastModifiedBy: string;
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -84,6 +85,7 @@ function Workspace() {
         history: [],
         collaborators: [],
         isAllowEdit: false,
+        lastModifiedBy: data?.user?.id || '',
       };
       const { data: project, error } = await supabase.from('workspaces').insert(newProject).select();
       if (error) {
