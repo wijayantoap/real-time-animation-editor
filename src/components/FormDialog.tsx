@@ -63,7 +63,6 @@ const FormDialog: FC = () => {
             const formJson = Object.fromEntries((formData as any).entries());
             const email = formJson.email;
             const password = formJson.password;
-            console.log(email);
             if (isLogin) {
               signInWithEmail(email, password);
             } else {

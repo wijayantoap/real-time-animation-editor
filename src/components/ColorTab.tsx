@@ -25,8 +25,6 @@ const ColorTab: React.FC<ColorTabProps> = ({ lottie, setAnimation }) => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  // console.log(allColors);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>, color: number[], index: number) => {
     setAnchorEl(event.currentTarget as HTMLButtonElement);
     setSelectedColor(color);

@@ -56,8 +56,6 @@ function Editor() {
         setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
       }
 
-      console.log(project);
-
       // if (!error) {
       //   setProjects(projects);
       // }
@@ -71,7 +69,6 @@ function Editor() {
     ) {
       fetchAnimation();
     }
-    console.log(params?.workspaceId);
   }, [params?.workspaceId, data?.user?.id]);
 
   const hideLayer = (hide: boolean, index: number) => {

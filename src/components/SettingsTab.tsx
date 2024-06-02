@@ -20,6 +20,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
 
   useEffect(() => {
     if (lottie) {
+      console.log(lottie);
       setOriginalWidth(lottie.w);
       setOriginalHeight(lottie.h);
     }
@@ -49,9 +50,15 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
 
     obj.layers.forEach((layer: any) => {
       if (layer.ks?.s) {
+        if (typeof layer.ks?.s?.k?.[0] === 'number' && typeof layer.ks?.s?.k?.[1] === 'number') {
+          const lastItemWidth = layer.ks?.s?.k?.[0];
+          const lastItemHeight = layer.ks?.s?.k?.[1];
+          layer.ks.s.k[0] = _width * lastItemWidth;
+          layer.ks.s.k[1] = _height * lastItemHeight;
+        }
+
         layer.ks.s.k.forEach((item: any) => {
           if (item.s) {
-            console.log(item.s[0]);
             const lastItemWidth = item.s[0];
             const lastItemHeight = item.s[1];
             item.s[0] = _width * lastItemWidth;
@@ -61,9 +68,15 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
       }
 
       if (layer.ks?.p) {
+        if (typeof layer.ks?.p?.k?.[0] === 'number' && typeof layer.ks?.p?.k?.[1] === 'number') {
+          const lastItemWidth = layer.ks?.p?.k?.[0];
+          const lastItemHeight = layer.ks?.p?.k?.[1];
+          layer.ks.p.k[0] = _width * lastItemWidth;
+          layer.ks.p.k[1] = _height * lastItemHeight;
+        }
+
         layer.ks.p.k.forEach((item: any) => {
           if (item.s) {
-            console.log(item.s[0]);
             const lastItemWidth = item.s[0];
             const lastItemHeight = item.s[1];
             item.s[0] = _width * lastItemWidth;
