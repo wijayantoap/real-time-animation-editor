@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid } from '@mui/material';
+import { Alert, Box, Grid } from '@mui/material';
 import LayerList from '../components/LayerList';
 import PanelTab from '../components/PanelTab';
 import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
@@ -26,6 +26,7 @@ function Editor() {
   const [layersShown, setLayersShown] = useState<number[]>([]);
   const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
   const [animationHistory, setAnimationHistory] = useState<LottieJson[]>([]);
+  const [error, setError] = useState<boolean>(false);
 
   const animRef = useRef<any>(null);
   const [lottieRef, setLottieRef] = useState<any>(null);
@@ -56,17 +57,10 @@ function Editor() {
         setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
       }
 
-      // if (!error) {
-      //   setProjects(projects);
-      // }
-      // setLoadingProjects(false);
+      if (error) setError(true);
     };
 
-    if (
-      // !originalAnimation &&
-      params?.workspaceId &&
-      data?.user?.id
-    ) {
+    if (params?.workspaceId && data?.user?.id) {
       fetchAnimation();
     }
   }, [params?.workspaceId, data?.user?.id]);
@@ -133,11 +127,22 @@ function Editor() {
   return (
     <>
       <EditorHeader />
+      {error && (
+        <Alert
+          variant="filled"
+          severity="error"
+          sx={{
+            mt: 2,
+          }}
+        >
+          Could not find the animation, please try something else
+        </Alert>
+      )}
       <Grid container spacing={2}>
         <Grid item xs={2.5}>
           <Box
             sx={{
-              height: '100vh',
+              height: '90vh',
               borderRight: '1px solid #F3F6F8',
               minWidth: 300,
             }}
@@ -157,7 +162,7 @@ function Editor() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              height: '100vh',
+              height: '90vh',
             }}
           >
             <Player
@@ -167,7 +172,7 @@ function Editor() {
               loop
               src={animation}
               onEvent={handleLottieEvent}
-              style={{ height: '100%', width: '100%' }}
+              style={{ height: '70vh', width: '100%' }}
             >
               <Controls visible={true} buttons={['play', 'repeat', 'frame', 'debug']} />
             </Player>
@@ -176,7 +181,7 @@ function Editor() {
         <Grid item xs={2.5}>
           <Box
             sx={{
-              height: '100vh',
+              height: '90vh',
               borderLeft: '1px solid #F3F6F8',
               minWidth: 300,
             }}
