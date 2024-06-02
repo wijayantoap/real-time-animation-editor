@@ -8,9 +8,10 @@ import { cloneDeep } from '../helper/colorify';
 interface SettingsTabProps {
   lottie: LottieJson;
   setAnimation: Dispatch<SetStateAction<LottieJson>>;
+  setSaveCount: Dispatch<SetStateAction<number>>;
 }
 
-const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
+const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation, setSaveCount }) => {
   const [originalWidth, setOriginalWidth] = useState(lottie?.w);
   const [originalHeight, setOriginalHeight] = useState(lottie?.h);
   const [width, setWidth] = useState<number>(lottie?.w);
@@ -35,6 +36,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
       op: duration,
       fr: frameRate,
     });
+    setSaveCount((prevState) => prevState + 1);
   };
 
   // obj.layers[].ks.s.k[].s[val1,val2]

@@ -13,9 +13,10 @@ interface ColorTabProps {
   lottie: LottieJson;
   layers: Layer[];
   setAnimation: React.Dispatch<React.SetStateAction<LottieJson>>;
+  setSaveCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ColorTab: React.FC<ColorTabProps> = ({ lottie, setAnimation }) => {
+const ColorTab: React.FC<ColorTabProps> = ({ lottie, setAnimation, setSaveCount }) => {
   const [uniqueColors, setUniqueColors] = useState<number[][]>([]);
   const [allColors, setAllColors] = useState<number[][]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -123,6 +124,7 @@ const ColorTab: React.FC<ColorTabProps> = ({ lottie, setAnimation }) => {
               setAnimation(replaceColor(selectedColor, color.hex, lottie));
             }
             setSelectedColor(color.hex);
+            setSaveCount((prevState) => prevState + 1);
           }}
         />
       </Popover>

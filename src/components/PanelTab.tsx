@@ -36,9 +36,10 @@ interface PanelTabProps {
   lottie: LottieJson;
   layers: Layer[];
   setAnimation: React.Dispatch<React.SetStateAction<LottieJson>>;
+  setSaveCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation }) => {
+const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation, setSaveCount }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -65,10 +66,10 @@ const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation }) => 
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <ColorTab lottie={lottie} layers={layers} setAnimation={setAnimation} />
+        <ColorTab lottie={lottie} layers={layers} setAnimation={setAnimation} setSaveCount={setSaveCount} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SettingsTab lottie={lottie} setAnimation={setAnimation} />
+        <SettingsTab lottie={lottie} setAnimation={setAnimation} setSaveCount={setSaveCount} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <ChatTab />

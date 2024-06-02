@@ -28,6 +28,7 @@ function Editor() {
   const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
   const [animationHistory, setAnimationHistory] = useState<LottieJson[]>([]);
   const [error, setError] = useState<boolean>(false);
+  const [saveCount, setSaveCount] = useState<number>(0);
 
   const animRef = useRef<any>(null);
   const [lottieRef, setLottieRef] = useState<any>(null);
@@ -124,6 +125,7 @@ function Editor() {
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersDeleted.includes(index));
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
     setOriginalAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
+    // setSaveCount((prevState) => prevState + 1); // todo: need this
   }, [layersDeleted]);
 
   useEffect(() => {
@@ -163,15 +165,14 @@ function Editor() {
             console.log(newRecord);
             console.log('compare', newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id);
             console.log('compare', newRecord?.lastModifiedBy, data?.user?.id);
-            // todo: currently infinite
 
-            // if (newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id) {
-            //   const lottieObj = newRecord?.lottieObj;
-            //   setAnimation(lottieObj);
-            //   setOriginalAnimation(lottieObj);
-            //   setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
-            //   setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
-            // }
+            if (newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id) {
+              const lottieObj = newRecord?.lottieObj;
+              setAnimation(lottieObj);
+              setOriginalAnimation(lottieObj);
+              setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
+              setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
+            }
           },
         )
         .subscribe();
@@ -187,6 +188,13 @@ function Editor() {
       supabase.removeChannel(channel);
     };
   }, [params?.workspaceId, data?.user?.id]);
+
+  useEffect(() => {
+    if (saveCount) {
+      updateWorkspace(animation);
+      console.log('=c', saveCount);
+    }
+  }, [saveCount]);
 
   if (!data?.user && !loading) return <Navigate to="/" />;
 
@@ -252,7 +260,7 @@ function Editor() {
               minWidth: 300,
             }}
           >
-            <PanelTab lottie={animation} setAnimation={setAnimation} layers={animation?.layers} />
+            <PanelTab lottie={animation} setAnimation={setAnimation} layers={animation?.layers} setSaveCount={setSaveCount} />
           </Box>
         </Grid>
       </Grid>
