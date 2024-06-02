@@ -2,7 +2,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Typography } from '@mui/material';
 import { LottieJson } from '../pages/Editor';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { cloneDeep } from '../helper/colorify';
 
 interface SettingsTabProps {
   lottie: LottieJson;
@@ -10,20 +11,70 @@ interface SettingsTabProps {
 }
 
 const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation }) => {
+  const [originalWidth, setOriginalWidth] = useState(lottie?.w);
+  const [originalHeight, setOriginalHeight] = useState(lottie?.h);
   const [width, setWidth] = useState<number>(lottie?.w);
   const [height, setHeight] = useState<number>(lottie?.h);
   const [duration, setDuration] = useState<number>(lottie?.op);
   const [frameRate, setFrameRate] = useState<number>(lottie?.fr);
 
+  useEffect(() => {
+    if (lottie) {
+      setOriginalWidth(lottie.w);
+      setOriginalHeight(lottie.h);
+    }
+  }, [lottie]);
+
   const changeAnimState = () => {
-    setAnimation((prevState) => ({
-      ...prevState,
+    const _lottie = updateScale(width, height);
+    setAnimation({
+      ..._lottie,
       w: width,
       h: height,
       op: duration,
       fr: frameRate,
-    }));
+    });
   };
+
+  // obj.layers[].ks.s.k[].s[val1,val2]
+  // obj.layers[].ks.p.k[].s[val1,val2]
+
+  function updateScale(width: number, height: number) {
+    const _width = width / originalWidth;
+    const _height = height / originalHeight;
+    const obj = cloneDeep(lottie);
+    if (!obj?.layers) {
+      return;
+    }
+
+    obj.layers.forEach((layer: any) => {
+      if (layer.ks?.s) {
+        layer.ks.s.k.forEach((item: any) => {
+          if (item.s) {
+            console.log(item.s[0]);
+            const lastItemWidth = item.s[0];
+            const lastItemHeight = item.s[1];
+            item.s[0] = _width * lastItemWidth;
+            item.s[1] = _height * lastItemHeight;
+          }
+        });
+      }
+
+      if (layer.ks?.p) {
+        layer.ks.p.k.forEach((item: any) => {
+          if (item.s) {
+            console.log(item.s[0]);
+            const lastItemWidth = item.s[0];
+            const lastItemHeight = item.s[1];
+            item.s[0] = _width * lastItemWidth;
+            item.s[1] = _height * lastItemHeight;
+          }
+        });
+      }
+    });
+
+    return obj;
+  }
 
   return (
     <Box

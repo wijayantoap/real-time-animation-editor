@@ -61,7 +61,7 @@ export const convertColorToLottieColor = (color: string | number[] | undefined) 
   }
 };
 
-const cloneDeep = (obj: any): any => {
+export const cloneDeep = (obj: any): any => {
   if (obj === null || typeof obj !== 'object') {
     return obj;
   }
