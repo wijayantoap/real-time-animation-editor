@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Container, Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import GET_FEATURED from '../queries/featuredPublicAnimations';
 import { useQuery } from '@apollo/client';
@@ -44,6 +44,10 @@ function Featured() {
   const { loading, error, data } = useQuery(GET_FEATURED, {
     variables: params,
   });
+
+  useEffect(() => {
+    if (data) window.scrollTo(0, 0);
+  }, [data]);
 
   const fetchAnimationData = async (url: string) => {
     try {

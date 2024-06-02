@@ -52,6 +52,7 @@ function Workspace() {
         setProjects(projects);
       }
       setLoadingProjects(false);
+      window.scrollTo(0, 0);
     };
 
     if (data?.user?.id) fetchWorkspace();
