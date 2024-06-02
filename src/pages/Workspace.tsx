@@ -85,13 +85,13 @@ function Workspace() {
         collaborators: [],
         isAllowEdit: false,
       };
-      const { error } = await supabase.from('workspaces').insert(newProject);
+      const { data: project, error } = await supabase.from('workspaces').insert(newProject).select();
       if (error) {
         console.error('Error saving workspace:', error);
         alert('Something went wrong');
         return;
       }
-      setProjects((prevState) => [newProject, ...prevState]);
+      setProjects((prevState) => [project[0], ...prevState]);
     } catch (error: any) {
       console.error('Error saving workspace:', error?.message);
     }
