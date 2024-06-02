@@ -1,5 +1,5 @@
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import homeAnim from '../assets/home_anim.json';
+import loader from '../assets/loader.json';
 import Header from '../components/Header';
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
@@ -12,7 +12,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import supabase from '../client/supabase';
 import { LottieJson } from './Editor';
 
-interface WorkspaceData {
+export interface WorkspaceData {
   id?: string;
   name: string;
   lottieObj: LottieJson;
@@ -38,14 +38,20 @@ const VisuallyHiddenInput = styled('input')({
 function Workspace() {
   const { data, loading } = useSession();
   const [projects, setProjects] = useState<WorkspaceData[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
   useEffect(() => {
     const fetchWorkspace = async () => {
-      const { data: projects, error } = await supabase.from('workspaces').select('*').eq('ownerId', data?.user?.id);
+      const { data: projects, error } = await supabase
+        .from('workspaces')
+        .select('*')
+        .eq('ownerId', data?.user?.id)
+        .order('dateModified', { ascending: false });
 
       if (!error) {
         setProjects(projects);
       }
+      setLoadingProjects(false);
     };
 
     if (data?.user) fetchWorkspace();
@@ -70,7 +76,7 @@ function Workspace() {
   const saveWorkspace = async (lottieObj: any) => {
     try {
       const newProject: WorkspaceData = {
-        name: lottieObj?.nm || 'Your exiting animation',
+        name: lottieObj?.nm || 'Your exciting animation',
         lottieObj: lottieObj,
         ownerId: data?.user?.id || '',
         dateModified: new Date(),
@@ -93,12 +99,10 @@ function Workspace() {
   const formatDate = (value: Date) => {
     const date = new Date(value);
 
-    // Extract day, month, and year components
     const day = date.getDate();
-    const month = date.getMonth() + 1; // Month is zero-based, so we add 1
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
-    // Format components into dd/mm/yyyy format
     return `${day}/${month}/${year}`;
   };
 
@@ -134,6 +138,7 @@ function Workspace() {
             </Button>
           </Box>
           <>
+            {loadingProjects && <Player autoplay loop src={loader} />}
             <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
               {projects?.map((item, index) => (
                 <Grid item key={index} component={Link} to={'/workspace/123'} sx={{ textDecoration: 'none' }}>

@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Container, Grid, Typography } from '@mui/material';
 import FormDialog from '../components/FormDialog';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import GET_FEATURED from '../queries/featuredPublicAnimations';
 import { useQuery } from '@apollo/client';
@@ -9,6 +9,11 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Player } from '@lottiefiles/react-lottie-player';
+import LoaderBackdrop from '../components/LoaderBackdrop';
+import useSession from '../hooks/useSession';
+import { WorkspaceData } from './Workspace';
+import supabase from '../client/supabase';
+import { useNavigate } from 'react-router-dom';
 
 function Featured() {
   const [open, setOpen] = useState(false);
@@ -19,9 +24,53 @@ function Featured() {
     before: '',
   });
 
+  const { data: userData } = useSession();
+  const navigate = useNavigate();
+
   const { loading, error, data } = useQuery(GET_FEATURED, {
     variables: params,
   });
+
+  const fetchAnimationData = async (url: string) => {
+    try {
+      // todo: handle redux load
+      const response = await fetch(url);
+      const lottieObj = await response.json();
+
+      try {
+        const newProject: WorkspaceData = {
+          name: lottieObj?.nm || 'Your exciting animation',
+          lottieObj: lottieObj,
+          ownerId: userData?.user?.id || '',
+          dateModified: new Date(),
+          history: [],
+          collaborators: [],
+          isAllowEdit: false,
+        };
+        const { error } = await supabase.from('workspaces').insert(newProject);
+        if (error) {
+          console.error('Error saving workspace:', error);
+          alert('Something went wrong');
+          return;
+        }
+        navigate('/workspace');
+      } catch (error: any) {
+        console.error('Error saving workspace:', error?.message);
+      }
+      console.log('succ', data);
+    } catch (error) {
+      console.error('Error fetching the Lottie animation data:', error);
+    }
+  };
+
+  const handleClick = (url: string) => {
+    if (userData?.user?.id) {
+      console.log(url);
+      fetchAnimationData(url);
+    } else {
+      setOpen(true);
+    }
+  };
 
   return (
     <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh', pb: 2 }}>
@@ -51,7 +100,7 @@ function Featured() {
                     index: number,
                   ) => (
                     <Grid item key={index}>
-                      <Box onClick={() => setOpen(true)}>
+                      <Box onClick={() => handleClick(item?.node?.jsonUrl)}>
                         <Player
                           autoplay
                           loop
@@ -123,6 +172,7 @@ function Featured() {
         </Box>
         {/* TODO: Use redux */}
         <FormDialog open={open} setOpen={setOpen} />
+        <LoaderBackdrop />
       </Container>
     </Box>
   );
