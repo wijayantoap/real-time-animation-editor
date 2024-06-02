@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import { Link } from 'react-router-dom';
 
 function EditorHeader() {
   const [toggleHeader, setToggleHeader] = React.useState(false);
@@ -94,8 +95,8 @@ function EditorHeader() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
+            <Tooltip title="Go to workspace">
+              <IconButton sx={{ p: 0 }} component={Link} to="/workspace">
                 <Avatar alt="Avatar" src="https://avatar.iran.liara.run/public/17" />
               </IconButton>
             </Tooltip>
