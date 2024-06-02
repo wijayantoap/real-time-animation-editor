@@ -54,8 +54,8 @@ function Workspace() {
       setLoadingProjects(false);
     };
 
-    if (data?.user) fetchWorkspace();
-  }, [data]);
+    if (data?.user?.id) fetchWorkspace();
+  }, [data?.user?.id]);
 
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
