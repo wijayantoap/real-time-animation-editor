@@ -34,7 +34,6 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
       message: text,
       timestamp: new Date(),
     };
-    setMessages((prevState) => [...prevState, payload]);
     setText('');
     const { error } = await supabase.from('chats').insert([payload]);
 
@@ -79,7 +78,7 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
             event: '*',
             schema: 'public',
             table: 'chats',
-            // filter: `workspaceId=eq.${params?.workspaceId}`,
+            filter: `workspaceId=eq.${params?.workspaceId}`,
           },
           (payload) => {
             const newRecord = payload.new;
