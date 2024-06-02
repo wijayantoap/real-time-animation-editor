@@ -13,56 +13,77 @@ import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 
 function EditorHeader() {
+  const [toggleHeader, setToggleHeader] = React.useState(false);
+
   return (
-    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white' }} elevation={1}>
+    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white', borderBottom: '1px solid #F3F6F8' }} elevation={0}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
-            sx={{
-              backgroundColor: '#00DDB3',
-              borderRadius: 2,
-            }}
+            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', width: 276, borderRight: '1px solid #F3F6F8' }}
+            onMouseEnter={() => setToggleHeader(true)}
+            onMouseLeave={() => setToggleHeader(false)}
           >
-            <GrassIcon
+            <Box
               sx={{
-                width: 36,
-                height: 32,
-                color: 'white',
+                backgroundColor: '#00DDB3',
+                borderRadius: 2,
               }}
-            />
+            >
+              <GrassIcon
+                sx={{
+                  width: 36,
+                  height: 32,
+                  color: 'white',
+                }}
+              />
+            </Box>
+            {!toggleHeader ? (
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href="/workspace"
+                sx={{
+                  ml: 1,
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontWeight: 700,
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                RottieEditor
+              </Typography>
+            ) : (
+              <Typography
+                component="a"
+                href="/workspace"
+                sx={{ ml: 1, textDecoration: 'none' }}
+                variant="body2"
+                fontWeight="bold"
+                color="primary.main"
+              >
+                Back to workspace
+              </Typography>
+            )}
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href="/workspace"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              RottieEditor
+            </Typography>
           </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              ml: 1,
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            RottieEditor
-          </Typography>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            RottieEditor
-          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <MenuItem onClick={() => alert('undo')}>
               <UndoIcon />
