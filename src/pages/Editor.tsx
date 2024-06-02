@@ -166,7 +166,7 @@ function Editor() {
             console.log('compare', newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id);
             console.log('compare', newRecord?.lastModifiedBy, data?.user?.id);
 
-            if (newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id) {
+            if (newRecord?.lottieObj) {
               const lottieObj = newRecord?.lottieObj;
               setAnimation(lottieObj);
               setOriginalAnimation(lottieObj);
