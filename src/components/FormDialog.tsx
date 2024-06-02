@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,20 +7,21 @@ import DialogContent from '@mui/material/DialogContent';
 import { Alert, Box, Divider, Typography } from '@mui/material';
 import supabase from '../client/supabase';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { toggleForm } from '../redux/slices/overlaySlice';
 
-interface FormDialogProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
+const FormDialog: FC = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const showForm = useSelector((state: RootState) => state.overlay.showForm);
+  const dispatch = useDispatch();
+
   const handleClose = () => {
-    setOpen(false);
+    dispatch(toggleForm());
   };
 
   const signUpNewUser = async (email: string, password: string) => {
@@ -29,6 +30,7 @@ const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
       password,
     });
     handleAuth(data, error);
+    handleClose();
   };
 
   const signInWithEmail = async (email: string, password: string) => {
@@ -38,6 +40,7 @@ const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
       password,
     });
     handleAuth(data, error);
+    handleClose();
   };
 
   const handleAuth = (data: any, error: any) => {
@@ -49,7 +52,7 @@ const FormDialog: FC<FormDialogProps> = ({ open, setOpen }) => {
   return (
     <>
       <Dialog
-        open={open}
+        open={showForm}
         onClose={handleClose}
         PaperProps={{
           component: 'form',

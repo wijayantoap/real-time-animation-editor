@@ -1,6 +1,5 @@
 import { Avatar, Box, Button, Container, Grid, Typography } from '@mui/material';
-import FormDialog from '../components/FormDialog';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Header from '../components/Header';
 import GET_FEATURED from '../queries/featuredPublicAnimations';
 import { useQuery } from '@apollo/client';
@@ -9,20 +8,35 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Player } from '@lottiefiles/react-lottie-player';
-import LoaderBackdrop from '../components/LoaderBackdrop';
 import useSession from '../hooks/useSession';
 import { WorkspaceData } from './Workspace';
 import supabase from '../client/supabase';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { toggleBackdrop, toggleForm } from '../redux/slices/overlaySlice';
+import FormDialog from '../components/FormDialog';
+
+interface EdgeData {
+  cursor: string;
+  node: {
+    bgColor: string;
+    createdBy: { name: string; avatarUrl: string };
+    downloads: number;
+    id: number;
+    jsonUrl: 'https://assets-v2.lottiefiles.com/a/67099fb4-1e86-11ef-941a-339fe156feac/JA9egDOSSW.json';
+    name: 'Social Bubble';
+  };
+}
 
 function Featured() {
-  const [open, setOpen] = useState(false);
   const [params, setParams] = useState({
     first: 20,
     last: 0,
     after: '',
     before: '',
   });
+
+  const dispatch = useDispatch();
 
   const { data: userData } = useSession();
   const navigate = useNavigate();
@@ -33,7 +47,6 @@ function Featured() {
 
   const fetchAnimationData = async (url: string) => {
     try {
-      // todo: handle redux load
       const response = await fetch(url);
       const lottieObj = await response.json();
 
@@ -50,31 +63,32 @@ function Featured() {
         const { error } = await supabase.from('workspaces').insert(newProject);
         if (error) {
           console.error('Error saving workspace:', error);
-          alert('Something went wrong');
           return;
         }
         navigate('/workspace');
       } catch (error: any) {
         console.error('Error saving workspace:', error?.message);
       }
-      console.log('succ', data);
     } catch (error) {
       console.error('Error fetching the Lottie animation data:', error);
+    } finally {
+      dispatch(toggleBackdrop());
     }
   };
 
   const handleClick = (url: string) => {
     if (userData?.user?.id) {
-      console.log(url);
+      dispatch(toggleBackdrop());
       fetchAnimationData(url);
     } else {
-      setOpen(true);
+      dispatch(toggleForm());
     }
   };
 
   return (
     <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh', pb: 2 }}>
       <Header />
+      <FormDialog />
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -94,41 +108,36 @@ function Featured() {
           {data && (
             <>
               <Grid container sx={{ flex: 1, my: 4, justifyContent: 'center' }} spacing={2}>
-                {data?.featuredPublicAnimations?.edges?.map(
-                  (
-                    item: any, // TODO: Change to ts type,
-                    index: number,
-                  ) => (
-                    <Grid item key={index}>
-                      <Box onClick={() => handleClick(item?.node?.jsonUrl)}>
-                        <Player
-                          autoplay
-                          loop
-                          src={item?.node?.jsonUrl}
-                          style={{ width: 212, height: 212, border: '1px solid #D7DFE6', borderRadius: 8, cursor: 'pointer' }}
-                        />
-                      </Box>
+                {data?.featuredPublicAnimations?.edges?.map((item: EdgeData, index: number) => (
+                  <Grid item key={index}>
+                    <Box onClick={() => handleClick(item?.node?.jsonUrl)}>
+                      <Player
+                        autoplay
+                        loop
+                        src={item?.node?.jsonUrl}
+                        style={{ width: 212, height: 212, border: '1px solid #D7DFE6', borderRadius: 8, cursor: 'pointer' }}
+                      />
+                    </Box>
 
-                      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt: 1, mb: 2 }}>
-                        <Box sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
-                          <Avatar src={item?.node?.createdBy?.avatarUrl} sx={{ mr: 1, height: 24, width: 24 }} />
-                          <Typography
-                            sx={{
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              maxWidth: 120,
-                            }}
-                          >
-                            {item?.node?.createdBy?.name}
-                          </Typography>
-                        </Box>
-                        <Typography sx={{ color: '#808E9A', fontSize: 14 }}>{item?.node?.downloads}</Typography>
-                        <FileDownloadOutlinedIcon sx={{ color: '#808E9A', fontSize: 16 }} />
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt: 1, mb: 2 }}>
+                      <Box sx={{ display: 'flex', flex: 1, flexDirection: 'row' }}>
+                        <Avatar src={item?.node?.createdBy?.avatarUrl} sx={{ mr: 1, height: 24, width: 24 }} />
+                        <Typography
+                          sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            maxWidth: 120,
+                          }}
+                        >
+                          {item?.node?.createdBy?.name}
+                        </Typography>
                       </Box>
-                    </Grid>
-                  ),
-                )}
+                      <Typography sx={{ color: '#808E9A', fontSize: 14 }}>{item?.node?.downloads}</Typography>
+                      <FileDownloadOutlinedIcon sx={{ color: '#808E9A', fontSize: 16 }} />
+                    </Box>
+                  </Grid>
+                ))}
               </Grid>
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flex: 1, alignSelf: 'normal' }}>
                 <Button
@@ -170,9 +179,6 @@ function Featured() {
             </Typography>
           )}
         </Box>
-        {/* TODO: Use redux */}
-        <FormDialog open={open} setOpen={setOpen} />
-        <LoaderBackdrop />
       </Container>
     </Box>
   );

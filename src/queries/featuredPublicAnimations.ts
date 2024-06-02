@@ -24,17 +24,7 @@ const GET_FEATURED = gql`
     createdAt
     downloads
     id
-    imageFileSize
-    imageFrame
-    imageUrl
-    lottieUrl
     jsonUrl
-    lottieVersion
-    name
-    status
-    updatedAt
-    url
-    isCanvaCompatible
     createdBy {
       name
       avatarUrl

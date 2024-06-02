@@ -1,21 +1,22 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import homeAnim from '../assets/home_anim.json';
-import FormDialog from '../components/FormDialog';
-import { useState } from 'react';
 import Header from '../components/Header';
+import FormDialog from '../components/FormDialog';
 import { Player } from '@lottiefiles/react-lottie-player';
 import useSession from '../hooks/useSession';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { toggleForm } from '../redux/slices/overlaySlice';
 
 function Home() {
-  const [open, setOpen] = useState(false);
-
   const navigate = useNavigate();
   const { data } = useSession();
+  const dispatch = useDispatch();
 
   return (
     <>
       <Header />
+      <FormDialog />
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -55,7 +56,7 @@ function Home() {
                 py: 1.5,
                 borderRadius: 4,
               }}
-              onClick={() => (data?.user ? navigate('/workspace') : setOpen(true))}
+              onClick={() => (data?.user ? navigate('/workspace') : dispatch(toggleForm()))}
             >
               {data ? 'Go to workspace' : "Join Now - It's Free"}
             </Button>
@@ -74,7 +75,6 @@ function Home() {
             <Player autoplay loop src={homeAnim} style={{ height: '100%', width: '100%' }} />
           </Box>
         </Box>
-        <FormDialog open={open} setOpen={setOpen} />
       </Container>
     </>
   );

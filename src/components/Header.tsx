@@ -15,6 +15,8 @@ import GrassIcon from '@mui/icons-material/Grass';
 import { Link, useNavigate } from 'react-router-dom';
 import supabase from '../client/supabase';
 import useSession from '../hooks/useSession';
+import { useDispatch } from 'react-redux';
+import { toggleForm } from '../redux/slices/overlaySlice';
 
 const pages = [{ title: 'Featured', to: '/featured' }];
 
@@ -27,10 +29,13 @@ function Header() {
 
   const { data } = useSession();
 
+  const dispatch = useDispatch();
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    if (!data?.user?.id) return dispatch(toggleForm());
     setAnchorElUser(event.currentTarget);
   };
 
@@ -46,9 +51,7 @@ function Header() {
     if (data?.user) {
       const { error } = await supabase.auth.signOut();
       if (error) alert('Something went wrong');
-      navigate('/');
-    } else {
-      navigate('/'); // Todo: use redux to show form
+      window.location.reload();
     }
     handleCloseUserMenu();
   };
@@ -149,7 +152,7 @@ function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Your account">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Avatar" src="https://avatar.iran.liara.run/public/17" />
               </IconButton>
@@ -171,7 +174,7 @@ function Header() {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleClick}>
-                <Typography textAlign="center">{data ? 'Log out' : 'Sign in'}</Typography>
+                <Typography textAlign="center">Log out</Typography>
               </MenuItem>
             </Menu>
           </Box>
