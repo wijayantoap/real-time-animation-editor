@@ -53,6 +53,7 @@ function Editor() {
         setOriginalAnimation(lottieObj);
         setAnimation(lottieObj);
         setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
+        setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
       }
 
       console.log(project);
