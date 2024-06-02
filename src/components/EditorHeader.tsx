@@ -14,7 +14,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 
 function EditorHeader() {
   return (
-    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white' }}>
+    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white' }} elevation={1}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box

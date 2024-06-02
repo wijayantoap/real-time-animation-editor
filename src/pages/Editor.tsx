@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid } from '@mui/material';
-import homeAnim from '../assets/home_anim.json';
 import LayerList from '../components/LayerList';
 import PanelTab from '../components/PanelTab';
 import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import EditorHeader from '../components/EditorHeader';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import useSession from '../hooks/useSession';
+import supabase from '../client/supabase';
 
 export interface LottieJson {
   v: string; // Version
@@ -21,10 +21,10 @@ export interface LottieJson {
 }
 
 function Editor() {
-  const [originalAnimation, setOriginalAnimation] = useState(homeAnim);
+  const [originalAnimation, setOriginalAnimation] = useState<LottieJson | null>(null);
   const [animation, setAnimation] = useState<LottieJson | any>(originalAnimation);
-  const [layersShown, setLayersShown] = useState(originalAnimation?.layers.map((_, index) => index));
-  const [layersDeleted, setLayersDeleted] = useState(originalAnimation?.layers.map((_, index) => index));
+  const [layersShown, setLayersShown] = useState<number[]>([]);
+  const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
   const [animationHistory, setAnimationHistory] = useState<LottieJson[]>([]);
 
   const animRef = useRef<any>(null);
@@ -36,8 +36,42 @@ function Editor() {
   });
 
   const { data, loading } = useSession();
+  let params = useParams();
 
-  console.log(animation);
+  useEffect(() => {
+    const fetchAnimation = async () => {
+      const { data: project, error } = await supabase
+        .from('workspaces')
+        .select('*')
+        .eq('ownerId', data?.user?.id)
+        .eq('id', params?.workspaceId)
+        .single();
+
+      const lottieObj = project?.lottieObj;
+
+      if (lottieObj) {
+        setOriginalAnimation(lottieObj);
+        setAnimation(lottieObj);
+        setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
+      }
+
+      console.log(project);
+
+      // if (!error) {
+      //   setProjects(projects);
+      // }
+      // setLoadingProjects(false);
+    };
+
+    if (
+      // !originalAnimation &&
+      params?.workspaceId &&
+      data?.user?.id
+    ) {
+      fetchAnimation();
+    }
+    console.log(params?.workspaceId);
+  }, [params?.workspaceId, data?.user?.id]);
 
   const hideLayer = (hide: boolean, index: number) => {
     setLayersShown((prevLayersShown) => {
@@ -65,14 +99,16 @@ function Editor() {
   );
 
   useEffect(() => {
+    if (!originalAnimation) return;
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersShown.includes(index));
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
   }, [layersShown]);
 
   useEffect(() => {
+    if (!originalAnimation) return;
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersDeleted.includes(index));
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
-    setOriginalAnimation((prevAnimation) => ({ ...prevAnimation, layers: filteredLayers }));
+    setOriginalAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
   }, [layersDeleted]);
 
   useEffect(() => {
@@ -109,8 +145,8 @@ function Editor() {
             }}
           >
             <LayerList
-              name={animation.nm}
-              layers={originalAnimation?.layers}
+              name={animation?.nm}
+              layers={originalAnimation?.layers || []}
               layersShown={layersShown}
               hideLayer={hideLayer}
               deleteLayer={deleteLayer}
