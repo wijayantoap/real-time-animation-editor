@@ -59,6 +59,8 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
   };
 
   useEffect(() => {
+    const channel = supabase.channel('table_chats_changes');
+
     const fetchInitialMessages = async () => {
       const { data, error } = await supabase.from('chats').select('*').eq('workspaceId', params?.workspaceId).order('timestamp', { ascending: true }); // Fetch messages in chronological order
 
@@ -70,8 +72,7 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
     };
 
     const subscribeToMessages = () => {
-      supabase
-        .channel('table_chats_changes')
+      channel
         .on(
           'postgres_changes',
           {
@@ -91,8 +92,14 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
       console.log(supabase.realtime.connectionState());
     };
 
-    fetchInitialMessages();
-    subscribeToMessages();
+    if (params?.workspaceId) {
+      fetchInitialMessages();
+      subscribeToMessages();
+    }
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [params?.workspaceId]);
 
   if (!data && !loading) return null;
