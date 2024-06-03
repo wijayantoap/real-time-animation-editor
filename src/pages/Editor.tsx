@@ -9,6 +9,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import useSession from '../hooks/useSession';
 import supabase from '../client/supabase';
 import { WorkspaceData } from './Workspace';
+import { LottieProvider, useLottie } from '../context/LottieContext';
 
 export interface LottieJson {
   v: string; // Version
@@ -23,12 +24,11 @@ export interface LottieJson {
 
 function Editor() {
   const [originalAnimation, setOriginalAnimation] = useState<LottieJson | null>(null);
-  const [animation, setAnimation] = useState<LottieJson | any>(originalAnimation);
   const [layersShown, setLayersShown] = useState<number[]>([]);
   const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
   const [animationHistory, setAnimationHistory] = useState<LottieJson[]>([]);
   const [error, setError] = useState<boolean>(false);
-  const [saveCount, setSaveCount] = useState<number>(0);
+  const { animation, setAnimation, layers, saveCount, setSaveCount } = useLottie();
 
   const animRef = useRef<any>(null);
   const [lottieRef, setLottieRef] = useState<any>(null);
@@ -259,7 +259,7 @@ function Editor() {
               minWidth: 300,
             }}
           >
-            <PanelTab lottie={animation} setAnimation={setAnimation} layers={animation?.layers} setSaveCount={setSaveCount} />
+            <PanelTab />
           </Box>
         </Grid>
       </Grid>
@@ -267,4 +267,10 @@ function Editor() {
   );
 }
 
-export default Editor;
+export default function EditorWrapper() {
+  return (
+    <LottieProvider>
+      <Editor />
+    </LottieProvider>
+  );
+}

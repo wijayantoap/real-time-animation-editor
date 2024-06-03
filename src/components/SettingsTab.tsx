@@ -1,17 +1,12 @@
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Typography } from '@mui/material';
-import { LottieJson } from '../pages/Editor';
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { cloneDeep } from '../helper/colorify';
+import { useLottie } from '../context/LottieContext';
 
-interface SettingsTabProps {
-  lottie: LottieJson;
-  setAnimation: Dispatch<SetStateAction<LottieJson>>;
-  setSaveCount: Dispatch<SetStateAction<number>>;
-}
-
-const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation, setSaveCount }) => {
+const SettingsTab: FC = () => {
+  const { animation: lottie, setAnimation, setSaveCount } = useLottie();
   const [originalWidth, setOriginalWidth] = useState(lottie?.w);
   const [originalHeight, setOriginalHeight] = useState(lottie?.h);
   const [width, setWidth] = useState<number>(lottie?.w);
@@ -85,9 +80,12 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation, setSaveCount 
 
   useEffect(() => {
     if (lottie) {
-      console.log(lottie);
       setOriginalWidth(lottie.w);
       setOriginalHeight(lottie.h);
+      setWidth(lottie.w);
+      setHeight(lottie.h);
+      setDuration(lottie.op);
+      setFrameRate(lottie.fr);
     }
   }, [lottie]);
 

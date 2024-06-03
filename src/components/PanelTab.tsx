@@ -5,8 +5,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import ColorTab from './ColorTab';
 import SettingsTab from './SettingsTab';
-import { Layer } from './LayerList';
-import { LottieJson } from '../pages/Editor';
 import ChatTab from './ChatTab';
 
 interface TabPanelProps {
@@ -32,14 +30,7 @@ function a11yProps(index: number) {
   };
 }
 
-interface PanelTabProps {
-  lottie: LottieJson;
-  layers: Layer[];
-  setAnimation: React.Dispatch<React.SetStateAction<LottieJson>>;
-  setSaveCount: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation, setSaveCount }) => {
+const PanelTab: React.FC = () => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -66,10 +57,10 @@ const PanelTab: React.FC<PanelTabProps> = ({ lottie, layers, setAnimation, setSa
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <ColorTab lottie={lottie} layers={layers} setAnimation={setAnimation} setSaveCount={setSaveCount} />
+        <ColorTab />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <SettingsTab lottie={lottie} setAnimation={setAnimation} setSaveCount={setSaveCount} />
+        <SettingsTab />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <ChatTab />

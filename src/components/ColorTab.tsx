@@ -3,20 +3,14 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Divider, Grid, Popover, Typography } from '@mui/material';
-import { Layer } from './LayerList';
-import { LottieJson } from '../pages/Editor';
 import { useEffect, useState } from 'react';
 import { colorify, getColors, replaceColor, rgbToHex } from '../helper/colorify';
 import { SketchPicker } from 'react-color';
+import { useLottie } from '../context/LottieContext';
 
-interface ColorTabProps {
-  lottie: LottieJson;
-  layers: Layer[];
-  setAnimation: React.Dispatch<React.SetStateAction<LottieJson>>;
-  setSaveCount: React.Dispatch<React.SetStateAction<number>>;
-}
+const ColorTab: React.FC = () => {
+  const { animation: lottie, setAnimation, setSaveCount } = useLottie();
 
-const ColorTab: React.FC<ColorTabProps> = ({ lottie, setAnimation, setSaveCount }) => {
   const [uniqueColors, setUniqueColors] = useState<number[][]>([]);
   const [allColors, setAllColors] = useState<number[][]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
