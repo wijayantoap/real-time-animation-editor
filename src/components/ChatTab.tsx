@@ -125,7 +125,7 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
           placeholder="Type something to chat"
           InputProps={{
             endAdornment: (
-              <IconButton>
+              <IconButton onClick={() => sendMessage(data?.user?.id, data?.user?.email, params?.workspaceId)}>
                 <SendIcon sx={{ color: 'primary.main' }} />
               </IconButton>
             ),
