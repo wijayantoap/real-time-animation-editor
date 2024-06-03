@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Tooltip, MenuItem } from '@mui/material';
 import GrassIcon from '@mui/icons-material/Grass';
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
 import { Link } from 'react-router-dom';
 import colors from '../constants/colors';
 
@@ -78,14 +76,7 @@ function EditorHeader() {
               RottieEditor
             </Typography>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <MenuItem onClick={() => alert('undo')}>
-              <UndoIcon />
-            </MenuItem>
-            <MenuItem onClick={() => alert('redo')}>
-              <RedoIcon />
-            </MenuItem>
-          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} />
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Go to workspace">
