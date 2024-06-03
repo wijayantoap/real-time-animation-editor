@@ -19,14 +19,6 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation, setSaveCount 
   const [duration, setDuration] = useState<number>(lottie?.op);
   const [frameRate, setFrameRate] = useState<number>(lottie?.fr);
 
-  useEffect(() => {
-    if (lottie) {
-      console.log(lottie);
-      setOriginalWidth(lottie.w);
-      setOriginalHeight(lottie.h);
-    }
-  }, [lottie]);
-
   const changeAnimState = () => {
     const _lottie = updateScale(width, height);
     setAnimation({
@@ -90,6 +82,14 @@ const SettingsTab: FC<SettingsTabProps> = ({ lottie, setAnimation, setSaveCount 
 
     return obj;
   }
+
+  useEffect(() => {
+    if (lottie) {
+      console.log(lottie);
+      setOriginalWidth(lottie.w);
+      setOriginalHeight(lottie.h);
+    }
+  }, [lottie]);
 
   return (
     <Box

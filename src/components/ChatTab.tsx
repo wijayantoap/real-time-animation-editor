@@ -22,10 +22,6 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
   async function sendMessage(userId: string = '', userName: string = '', workspaceId: string = '') {
     const payload = {
       userId,
@@ -57,6 +53,10 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
 
     return `${formattedHours}:${formattedMinutes} ${formattedDay}/${formattedMonth}/${year}`;
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     const channel = supabase.channel('table_chats_changes');

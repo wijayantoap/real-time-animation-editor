@@ -45,10 +45,6 @@ function Featured() {
     variables: params,
   });
 
-  useEffect(() => {
-    if (data) window.scrollTo(0, 0);
-  }, [data]);
-
   const fetchAnimationData = async (url: string) => {
     try {
       const response = await fetch(url);
@@ -89,6 +85,10 @@ function Featured() {
       dispatch(toggleForm());
     }
   };
+
+  useEffect(() => {
+    if (data) window.scrollTo(0, 0);
+  }, [data]);
 
   return (
     <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh', pb: 2 }}>

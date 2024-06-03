@@ -41,24 +41,6 @@ function Workspace() {
   const [projects, setProjects] = useState<WorkspaceData[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
 
-  useEffect(() => {
-    const fetchWorkspace = async () => {
-      const { data: projects, error } = await supabase
-        .from('workspaces')
-        .select('*')
-        .eq('ownerId', data?.user?.id)
-        .order('dateModified', { ascending: false });
-
-      if (!error) {
-        setProjects(projects);
-      }
-      setLoadingProjects(false);
-      window.scrollTo(0, 0);
-    };
-
-    if (data?.user?.id) fetchWorkspace();
-  }, [data?.user?.id]);
-
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -108,6 +90,24 @@ function Workspace() {
 
     return `${day}/${month}/${year}`;
   };
+
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      const { data: projects, error } = await supabase
+        .from('workspaces')
+        .select('*')
+        .eq('ownerId', data?.user?.id)
+        .order('dateModified', { ascending: false });
+
+      if (!error) {
+        setProjects(projects);
+      }
+      setLoadingProjects(false);
+      window.scrollTo(0, 0);
+    };
+
+    if (data?.user?.id) fetchWorkspace();
+  }, [data?.user?.id]);
 
   if (!data?.user && !loading) return <Navigate to="/" />;
 
