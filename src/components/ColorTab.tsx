@@ -105,7 +105,7 @@ const ColorTab: React.FC = () => {
         <SketchPicker
           color={typeof selectedColor === 'string' ? selectedColor : rgbToHex(selectedColor)}
           onChangeComplete={(color) => {
-            if (selectedIndex) {
+            if (selectedIndex === 0 || selectedIndex) {
               let colors = getColors(lottie);
               colors[selectedIndex] = [color.rgb.r, color.rgb.g, color.rgb.b];
               setAnimation(colorify(colors, lottie, true));
