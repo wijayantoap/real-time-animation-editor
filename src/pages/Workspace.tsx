@@ -11,6 +11,7 @@ import useSession from '../hooks/useSession';
 import { ChangeEvent, useEffect, useState } from 'react';
 import supabase from '../client/supabase';
 import { LottieJson } from './Editor';
+import { formatDate } from '../helper/dateHelper';
 
 export interface WorkspaceData {
   id?: string;
@@ -79,16 +80,6 @@ function Workspace() {
     } catch (error: any) {
       console.error('Error saving workspace:', error?.message);
     }
-  };
-
-  const formatDate = (value: Date) => {
-    const date = new Date(value);
-
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
   };
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import supabase from '../client/supabase';
 import useSession from '../hooks/useSession';
 import { useParams } from 'react-router-dom';
+import { formatDateTime } from '../helper/dateHelper';
 
 interface ChatTabProps {
   setChatHistory?: React.Dispatch<React.SetStateAction<any>>;
@@ -37,22 +38,6 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
       console.error('Error sending message:', error);
     }
   }
-
-  const formatDate = (time: Date): string => {
-    const date = new Date(time);
-    const day: number = date.getDate();
-    const month: number = date.getMonth() + 1;
-    const year: number = date.getFullYear();
-    const hours: number = date.getHours();
-    const minutes: number = date.getMinutes();
-
-    const formattedDay: string = day < 10 ? '0' + day : String(day);
-    const formattedMonth: string = month < 10 ? '0' + month : String(month);
-    const formattedHours: string = hours < 10 ? '0' + hours : String(hours);
-    const formattedMinutes: string = minutes < 10 ? '0' + minutes : String(minutes);
-
-    return `${formattedHours}:${formattedMinutes} ${formattedDay}/${formattedMonth}/${year}`;
-  };
 
   useEffect(() => {
     scrollToBottom();
@@ -129,7 +114,7 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
             <Typography>{item?.message}</Typography>
             <Box sx={{ display: 'flex' }}>
               <Box sx={{ flex: 1 }} />
-              <Typography variant="caption">{formatDate(item?.timestamp)}</Typography>
+              <Typography variant="caption">{formatDateTime(item?.timestamp)}</Typography>
             </Box>
           </Box>
         ))}
