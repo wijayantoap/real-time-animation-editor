@@ -48,7 +48,7 @@ function Editor() {
 
       const lottieObj = project?.lottieObj;
 
-      if (lottieObj) {
+      if (lottieObj?.layers) {
         setOriginalAnimation(lottieObj);
         setAnimation(lottieObj);
         setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
