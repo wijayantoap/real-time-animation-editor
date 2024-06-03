@@ -5,6 +5,7 @@ import supabase from '../client/supabase';
 import useSession from '../hooks/useSession';
 import { useParams } from 'react-router-dom';
 import { formatDateTime } from '../helper/dateHelper';
+import colors from '../constants/colors';
 
 interface ChatTabProps {
   setChatHistory?: React.Dispatch<React.SetStateAction<any>>;
@@ -100,7 +101,7 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
           <Box
             sx={{
               p: 1,
-              backgroundColor: '#00DDB3',
+              backgroundColor: colors.secondary,
               borderRadius: 2,
               mb: 1,
             }}

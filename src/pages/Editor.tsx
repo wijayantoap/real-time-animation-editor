@@ -10,6 +10,7 @@ import useSession from '../hooks/useSession';
 import supabase from '../client/supabase';
 import { WorkspaceData } from './Workspace';
 import { LottieProvider, useLottie } from '../context/LottieContext';
+import colors from '../constants/colors';
 
 export interface LottieJson {
   v: string; // Version
@@ -206,7 +207,7 @@ function Editor() {
           <Box
             sx={{
               height: '90vh',
-              borderRight: '1px solid #F3F6F8',
+              borderRight: `1px solid ${colors.lightgray}`,
               minWidth: 300,
             }}
           >
@@ -245,7 +246,7 @@ function Editor() {
           <Box
             sx={{
               height: '90vh',
-              borderLeft: '1px solid #F3F6F8',
+              borderLeft: `1px solid ${colors.lightgray}`,
               minWidth: 300,
             }}
           >

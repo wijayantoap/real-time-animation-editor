@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toggleBackdrop, toggleForm } from '../redux/slices/overlaySlice';
 import FormDialog from '../components/FormDialog';
+import colors from '../constants/colors';
 
 interface EdgeData {
   cursor: string;
@@ -87,7 +88,7 @@ function Featured() {
   }, [data]);
 
   return (
-    <Box sx={{ backgroundColor: '#FBFCFD', minHeight: '100vh', pb: 2 }}>
+    <Box sx={{ backgroundColor: colors.whitegray, minHeight: '100vh', pb: 2 }}>
       <Header />
       <FormDialog />
       <Container maxWidth="lg">
@@ -134,8 +135,8 @@ function Featured() {
                           {item?.node?.createdBy?.name}
                         </Typography>
                       </Box>
-                      <Typography sx={{ color: '#808E9A', fontSize: 14 }}>{item?.node?.downloads}</Typography>
-                      <FileDownloadOutlinedIcon sx={{ color: '#808E9A', fontSize: 16 }} />
+                      <Typography sx={{ color: colors.darkgray, fontSize: 14 }}>{item?.node?.downloads}</Typography>
+                      <FileDownloadOutlinedIcon sx={{ color: colors.darkgray, fontSize: 16 }} />
                     </Box>
                   </Grid>
                 ))}

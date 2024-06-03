@@ -13,6 +13,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LayersIcon from '@mui/icons-material/Layers';
+import colors from '../constants/colors';
 
 // Define the type for a Layer object based on common Lottie properties
 export interface Layer {
@@ -74,7 +75,7 @@ const LayerList: React.FC<LayerListProps> = ({ name, layers, layersShown, hideLa
     >
       <ListItemButton disableRipple onClick={handleClick}>
         <ListItemIcon>
-          <RectangleRoundedIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
+          <RectangleRoundedIcon sx={{ color: colors.lightgray, width: 32, height: 32 }} />
         </ListItemIcon>
         <ListItemText primary={name || 'Main'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} />
         {open ? <ExpandLess /> : <ExpandMore />}
@@ -86,7 +87,7 @@ const LayerList: React.FC<LayerListProps> = ({ name, layers, layersShown, hideLa
             return (
               <ListItemButton disableRipple key={index} sx={{ pl: 4 }}>
                 <ListItemIcon>
-                  <LayersIcon sx={{ color: '#F3F6F8', width: 32, height: 32 }} />
+                  <LayersIcon sx={{ color: colors.lightgray, width: 32, height: 32 }} />
                 </ListItemIcon>
                 <ListItemText primary={item?.nm} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} />
                 <IconButton size="small" onClick={() => hideLayer(isShown, index)}>

@@ -12,22 +12,23 @@ import GrassIcon from '@mui/icons-material/Grass';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import { Link } from 'react-router-dom';
+import colors from '../constants/colors';
 
 function EditorHeader() {
   const [toggleHeader, setToggleHeader] = React.useState(false);
 
   return (
-    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white', borderBottom: '1px solid #F3F6F8' }} elevation={0}>
+    <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white', borderBottom: `1px solid ${colors.lightgray}` }} elevation={0}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
-            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', width: 276, borderRight: '1px solid #F3F6F8' }}
+            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', width: 276, borderRight: `1px solid ${colors.lightgray}` }}
             onMouseEnter={() => setToggleHeader(true)}
             onMouseLeave={() => setToggleHeader(false)}
           >
             <Box
               sx={{
-                backgroundColor: '#00DDB3',
+                backgroundColor: colors.secondary,
                 borderRadius: 2,
               }}
             >

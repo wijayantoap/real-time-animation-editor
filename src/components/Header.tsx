@@ -12,11 +12,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import supabase from '../client/supabase';
 import useSession from '../hooks/useSession';
 import { useDispatch } from 'react-redux';
 import { toggleForm } from '../redux/slices/overlaySlice';
+import colors from '../constants/colors';
 
 const pages = [{ title: 'Featured', to: '/featured' }];
 
@@ -25,7 +26,6 @@ const protectedPages = [{ title: 'Workspace', to: '/workspace' }];
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const navigate = useNavigate();
 
   const { data } = useSession();
 
@@ -62,7 +62,7 @@ function Header() {
         <Toolbar disableGutters>
           <Box
             sx={{
-              backgroundColor: '#00DDB3',
+              backgroundColor: colors.secondary,
               borderRadius: 2,
             }}
           >

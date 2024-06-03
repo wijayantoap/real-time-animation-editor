@@ -12,6 +12,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import supabase from '../client/supabase';
 import { LottieJson } from './Editor';
 import { formatDate } from '../helper/dateHelper';
+import colors from '../constants/colors';
 
 export interface WorkspaceData {
   id?: string;
@@ -95,7 +96,7 @@ function Workspace() {
   if (!data?.user && !loading) return <Navigate to="/" />;
 
   return (
-    <Box sx={{ backgroundColor: '#F3F6F8', minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: colors.lightgray, minHeight: '100vh' }}>
       <Header />
       <Container maxWidth="lg">
         <Box

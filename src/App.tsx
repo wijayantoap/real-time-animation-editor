@@ -9,6 +9,7 @@ import Workspace from './pages/Workspace';
 import Editor from './pages/Editor';
 import { store } from './redux/store';
 import LoaderBackdrop from './components/LoaderBackdrop';
+import colors from './constants/colors';
 
 let theme = createTheme({
   typography: {
@@ -16,7 +17,7 @@ let theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#009D91',
+      main: colors.main,
     },
   },
 });
