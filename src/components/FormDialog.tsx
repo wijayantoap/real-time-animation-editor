@@ -25,7 +25,7 @@ const FormDialog: FC = () => {
       password,
     });
     handleAuth(data, error);
-    handleClose();
+    if (!error) handleClose();
   };
 
   const signInWithEmail = async (email: string, password: string) => {
