@@ -35,7 +35,7 @@ const FormDialog: FC = () => {
       password,
     });
     handleAuth(data, error);
-    handleClose();
+    if (!error) handleClose();
   };
 
   const handleAuth = (data: any, error: any) => {
