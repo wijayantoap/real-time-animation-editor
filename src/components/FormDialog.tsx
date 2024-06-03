@@ -25,7 +25,6 @@ const FormDialog: FC = () => {
       password,
     });
     handleAuth(data, error);
-    if (!error) handleClose();
   };
 
   const signInWithEmail = async (email: string, password: string) => {
@@ -35,13 +34,13 @@ const FormDialog: FC = () => {
       password,
     });
     handleAuth(data, error);
-    if (!error) handleClose();
   };
 
   const handleAuth = (data: any, error: any) => {
     if (data?.user) navigate('/workspace');
     if (error) setError(error?.message || 'Something went wrong');
     setLoading(false);
+    if (!error) handleClose();
   };
 
   return (
