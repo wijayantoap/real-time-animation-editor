@@ -1,11 +1,11 @@
 import { Box, Button, Container, Typography } from '@mui/material';
-import homeAnim from '../assets/home_anim.json';
-import Header from '../components/Header';
-import FormDialog from '../components/FormDialog';
-import { Player } from '@lottiefiles/react-lottie-player';
-import useSession from '../hooks/useSession';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Player } from '@lottiefiles/react-lottie-player';
+import Header from '../components/Header';
+import FormDialog from '../components/FormDialog';
+import homeAnim from '../assets/home_anim.json';
+import useSession from '../hooks/useSession';
 import { toggleForm } from '../redux/slices/overlaySlice';
 
 function Home() {

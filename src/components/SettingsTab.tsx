@@ -1,7 +1,5 @@
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { Button, Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
+import { Box, TextField, Button, Typography } from '@mui/material';
 import { cloneDeep } from '../helper/colorify';
 import { useLottie } from '../context/LottieContext';
 

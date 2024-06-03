@@ -1,12 +1,9 @@
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Divider, Grid, Popover, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { colorify, getColors, replaceColor, rgbToHex } from '../helper/colorify';
+import { Box, Divider, Grid, Popover, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { SketchPicker } from 'react-color';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useLottie } from '../context/LottieContext';
+import { colorify, getColors, replaceColor, rgbToHex } from '../helper/colorify';
 
 const ColorTab: React.FC = () => {
   const { animation: lottie, setAnimation, setSaveCount } = useLottie();

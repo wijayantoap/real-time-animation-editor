@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
 import { Alert, Box, Grid } from '@mui/material';
+import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
+import { LottieProvider, useLottie } from '../context/LottieContext';
+import { WorkspaceData } from './Workspace';
 import LayerList from '../components/LayerList';
 import PanelTab from '../components/PanelTab';
-import { Controls, Player, PlayerEvent } from '@lottiefiles/react-lottie-player';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import EditorHeader from '../components/EditorHeader';
-import { Navigate, useParams } from 'react-router-dom';
 import useSession from '../hooks/useSession';
 import supabase from '../client/supabase';
-import { WorkspaceData } from './Workspace';
-import { LottieProvider, useLottie } from '../context/LottieContext';
 import colors from '../constants/colors';
 
 export interface LottieJson {

@@ -1,10 +1,10 @@
-import { Box, IconButton, TextField, Typography } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useRef, useState } from 'react';
-import supabase from '../client/supabase';
-import useSession from '../hooks/useSession';
+import { Box, IconButton, TextField, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import supabase from '../client/supabase';
+import SendIcon from '@mui/icons-material/Send';
 import { formatDateTime } from '../helper/dateHelper';
+import useSession from '../hooks/useSession';
 import colors from '../constants/colors';
 
 interface ChatTabProps {

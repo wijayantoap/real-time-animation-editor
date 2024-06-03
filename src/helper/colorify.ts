@@ -61,25 +61,6 @@ export const convertColorToLottieColor = (color: string | number[] | undefined) 
   }
 };
 
-export const cloneDeep = (obj: any): any => {
-  if (obj === null || typeof obj !== 'object') {
-    return obj;
-  }
-
-  if (Array.isArray(obj)) {
-    return obj.map(cloneDeep);
-  }
-
-  const clonedObj: any = {};
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      clonedObj[key] = cloneDeep(obj[key]);
-    }
-  }
-
-  return clonedObj;
-};
-
 export const replaceColor = (sourceColor: string | number[], targetColor: string | number[], lottieObj: any, immutable = true) => {
   const genSourceLottieColor = convertColorToLottieColor(sourceColor);
   const genTargetLottieColor = convertColorToLottieColor(targetColor);
@@ -158,4 +139,23 @@ export const rgbToHex = (rgb: number[]) => {
       })
       .join('')
   );
+};
+
+export const cloneDeep = (obj: any): any => {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(cloneDeep);
+  }
+
+  const clonedObj: any = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      clonedObj[key] = cloneDeep(obj[key]);
+    }
+  }
+
+  return clonedObj;
 };

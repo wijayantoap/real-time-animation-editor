@@ -1,13 +1,5 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import { useState } from 'react';
+import { AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Tooltip, MenuItem } from '@mui/material';
 import GrassIcon from '@mui/icons-material/Grass';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
@@ -15,7 +7,7 @@ import { Link } from 'react-router-dom';
 import colors from '../constants/colors';
 
 function EditorHeader() {
-  const [toggleHeader, setToggleHeader] = React.useState(false);
+  const [toggleHeader, setToggleHeader] = useState(false);
 
   return (
     <AppBar position="sticky" color="transparent" sx={{ backgroundColor: 'white', borderBottom: `1px solid ${colors.lightgray}` }} elevation={0}>

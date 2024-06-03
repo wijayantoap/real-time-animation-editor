@@ -1,13 +1,7 @@
-import * as React from 'react';
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
+import { FC, useState } from 'react';
+import { ListSubheader, List, ListItemButton, ListItemIcon, ListItemText, Collapse, IconButton } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { IconButton } from '@mui/material';
 import RectangleRoundedIcon from '@mui/icons-material/RectangleRounded';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
@@ -15,7 +9,6 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LayersIcon from '@mui/icons-material/Layers';
 import colors from '../constants/colors';
 
-// Define the type for a Layer object based on common Lottie properties
 export interface Layer {
   nm: string; // name
   ty: number; // type
@@ -40,8 +33,8 @@ interface LayerListProps {
   deleteLayer: (index: number) => void;
 }
 
-const LayerList: React.FC<LayerListProps> = ({ name, layers, layersShown, hideLayer, deleteLayer }) => {
-  const [open, setOpen] = React.useState(true);
+const LayerList: FC<LayerListProps> = ({ name, layers, layersShown, hideLayer, deleteLayer }) => {
+  const [open, setOpen] = useState(true);
 
   const handleClick = () => {
     setOpen(!open);

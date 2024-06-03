@@ -1,13 +1,12 @@
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
-import Home from './pages/Home';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Provider } from 'react-redux';
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { store } from './redux/store';
+import Home from './pages/Home';
 import Featured from './pages/Featured';
 import Workspace from './pages/Workspace';
 import Editor from './pages/Editor';
-import { store } from './redux/store';
 import LoaderBackdrop from './components/LoaderBackdrop';
 import colors from './constants/colors';
 

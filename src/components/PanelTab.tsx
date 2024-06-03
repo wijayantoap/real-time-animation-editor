@@ -1,14 +1,11 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { FC, ReactNode, SyntheticEvent, useState } from 'react';
+import { Tabs, Tab, Typography, Box } from '@mui/material';
 import ColorTab from './ColorTab';
 import SettingsTab from './SettingsTab';
 import ChatTab from './ChatTab';
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   index: number;
   value: number;
 }
@@ -30,10 +27,10 @@ function a11yProps(index: number) {
   };
 }
 
-const PanelTab: React.FC = () => {
-  const [value, setValue] = React.useState(0);
+const PanelTab: FC = () => {
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 

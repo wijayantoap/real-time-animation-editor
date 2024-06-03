@@ -1,20 +1,20 @@
-import { Avatar, Box, Button, Container, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import Header from '../components/Header';
-import GET_FEATURED from '../queries/featuredPublicAnimations';
 import { useQuery } from '@apollo/client';
-import loader from '../assets/loader.json';
+import { Player } from '@lottiefiles/react-lottie-player';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Avatar, Box, Button, Container, Grid, Typography } from '@mui/material';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Player } from '@lottiefiles/react-lottie-player';
-import useSession from '../hooks/useSession';
 import { WorkspaceData } from './Workspace';
-import supabase from '../client/supabase';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { toggleBackdrop, toggleForm } from '../redux/slices/overlaySlice';
+import Header from '../components/Header';
 import FormDialog from '../components/FormDialog';
+import GET_FEATURED from '../queries/featuredPublicAnimations';
+import loader from '../assets/loader.json';
+import useSession from '../hooks/useSession';
+import supabase from '../client/supabase';
+import { toggleBackdrop, toggleForm } from '../redux/slices/overlaySlice';
 import colors from '../constants/colors';
 
 interface EdgeData {
