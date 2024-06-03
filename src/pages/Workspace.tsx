@@ -60,7 +60,7 @@ function Workspace() {
         name: lottieObj?.nm || 'Your exciting animation',
         lottieObj: lottieObj,
         ownerId: data?.user?.id || '',
-        dateModified: new Date(),=
+        dateModified: new Date(),
       };
       const { data: project, error } = await supabase.from('workspaces').insert(newProject).select();
       if (error) {

@@ -27,7 +27,7 @@ function Editor() {
   const [layersShown, setLayersShown] = useState<number[]>([]);
   const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
   const [error, setError] = useState<boolean>(false);
-  const { animation, setAnimation, layers, saveCount, setSaveCount } = useLottie();
+  const { animation, setAnimation, saveCount, setSaveCount } = useLottie();
 
   const animRef = useRef<any>(null);
   const [lottieRef, setLottieRef] = useState<any>(null);
