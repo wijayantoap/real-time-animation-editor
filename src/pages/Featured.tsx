@@ -57,9 +57,6 @@ function Featured() {
           ownerId: userData?.user?.id || '',
           dateModified: new Date(),
           history: [],
-          collaborators: [],
-          isAllowEdit: false,
-          lastModifiedBy: userData?.user?.id || '',
         };
         const { error } = await supabase.from('workspaces').insert(newProject);
         if (error) {

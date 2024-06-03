@@ -78,9 +78,6 @@ function Editor() {
         ownerId: data?.user?.id || '',
         dateModified: new Date(),
         history: [],
-        collaborators: [],
-        isAllowEdit: false,
-        lastModifiedBy: data?.user?.id || '',
       };
 
       // Update existing workspace
@@ -164,9 +161,6 @@ function Editor() {
           },
           (payload) => {
             const newRecord = payload.new as any;
-            console.log(newRecord);
-            console.log('compare', newRecord?.lottieObj && newRecord?.lastModifiedBy !== data?.user?.id);
-            console.log('compare', newRecord?.lastModifiedBy, data?.user?.id);
 
             if (newRecord?.lottieObj) {
               const lottieObj = newRecord?.lottieObj;
@@ -178,8 +172,6 @@ function Editor() {
           },
         )
         .subscribe();
-
-      console.log(supabase.realtime.connectionState());
     };
 
     if (params?.workspaceId && data?.user?.id) {

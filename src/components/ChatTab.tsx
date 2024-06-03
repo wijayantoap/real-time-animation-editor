@@ -68,13 +68,10 @@ const ChatTab: React.FC<ChatTabProps> = ({ setChatHistory }) => {
           },
           (payload) => {
             const newRecord = payload.new;
-            console.log(newRecord);
             setMessages((prevState) => [...prevState, newRecord]);
           },
         )
         .subscribe();
-
-      console.log(supabase.realtime.connectionState());
     };
 
     if (params?.workspaceId) {
