@@ -143,7 +143,7 @@ function Workspace() {
                       },
                     }}
                   >
-                    <Player hover={true} loop src={item?.lottieObj} style={{ width: '100%', height: 158, paddingBottom: 50 }} />
+                    <Player autoplay loop src={item?.lottieObj} style={{ width: '100%', height: 158, paddingBottom: 50 }} />
                     <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', alignItems: 'center', mt: '-50px' }}>
                       <FileOpenOutlinedIcon sx={{ color: 'primary.main' }} />
                       <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '80%', ml: 1 }}>
