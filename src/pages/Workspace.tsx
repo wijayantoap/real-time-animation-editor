@@ -136,7 +136,7 @@ function Workspace() {
             </Button>
           </Box>
           <>
-            {loadingProjects && <Player autoplay loop src={loader} />}
+            {loadingProjects && <Player autoplay loop src={loader} style={{ height: 400, width: 400 }} />}
             <Grid container spacing={2} sx={{ flex: 1, my: 2, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
               {projects?.map((item, index) => (
                 <Grid item key={index}>

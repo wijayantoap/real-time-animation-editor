@@ -31,47 +31,51 @@ const SettingsTab: FC = () => {
     const _width = width / originalWidth;
     const _height = height / originalHeight;
     const obj = cloneDeep(lottie);
-    if (!obj?.layers) {
-      return;
+
+    const updateProperties = (layers: any[]) => {
+      layers.forEach((layer: any) => {
+        if (layer.ks?.s) {
+          if (typeof layer.ks.s.k?.[0] === 'number' && typeof layer.ks.s.k?.[1] === 'number') {
+            layer.ks.s.k[0] *= _width;
+            layer.ks.s.k[1] *= _height;
+          }
+          if (Array.isArray(layer.ks.s.k)) {
+            layer.ks.s.k.forEach((item: any) => {
+              if (item.s) {
+                item.s[0] *= _width;
+                item.s[1] *= _height;
+              }
+            });
+          }
+        }
+        if (layer.ks?.p) {
+          if (typeof layer.ks.p.k?.[0] === 'number' && typeof layer.ks.p.k?.[1] === 'number') {
+            layer.ks.p.k[0] *= _width;
+            layer.ks.p.k[1] *= _height;
+          }
+          if (Array.isArray(layer.ks.p.k)) {
+            layer.ks.p.k.forEach((item: any) => {
+              if (item.s) {
+                item.s[0] *= _width;
+                item.s[1] *= _height;
+              }
+            });
+          }
+        }
+      });
+    };
+
+    if (obj?.assets) {
+      obj.assets.forEach((asset: any) => {
+        if (asset.layers) {
+          updateProperties(asset.layers);
+        }
+      });
     }
 
-    obj.layers.forEach((layer: any) => {
-      if (layer.ks?.s) {
-        if (typeof layer.ks?.s?.k?.[0] === 'number' && typeof layer.ks?.s?.k?.[1] === 'number') {
-          const lastItemWidth = layer.ks?.s?.k?.[0];
-          const lastItemHeight = layer.ks?.s?.k?.[1];
-          layer.ks.s.k[0] = _width * lastItemWidth;
-          layer.ks.s.k[1] = _height * lastItemHeight;
-        }
-
-        layer.ks.s.k.forEach((item: any) => {
-          if (item.s) {
-            const lastItemWidth = item.s[0];
-            const lastItemHeight = item.s[1];
-            item.s[0] = _width * lastItemWidth;
-            item.s[1] = _height * lastItemHeight;
-          }
-        });
-      }
-
-      if (layer.ks?.p) {
-        if (typeof layer.ks?.p?.k?.[0] === 'number' && typeof layer.ks?.p?.k?.[1] === 'number') {
-          const lastItemWidth = layer.ks?.p?.k?.[0];
-          const lastItemHeight = layer.ks?.p?.k?.[1];
-          layer.ks.p.k[0] = _width * lastItemWidth;
-          layer.ks.p.k[1] = _height * lastItemHeight;
-        }
-
-        layer.ks.p.k.forEach((item: any) => {
-          if (item.s) {
-            const lastItemWidth = item.s[0];
-            const lastItemHeight = item.s[1];
-            item.s[0] = _width * lastItemWidth;
-            item.s[1] = _height * lastItemHeight;
-          }
-        });
-      }
-    });
+    if (obj.layers) {
+      updateProperties(obj.layers);
+    }
 
     return obj;
   }
