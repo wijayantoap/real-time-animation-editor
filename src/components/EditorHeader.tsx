@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Tooltip, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Container, Avatar, Tooltip } from '@mui/material';
 import GrassIcon from '@mui/icons-material/Grass';
 import { Link } from 'react-router-dom';
 import colors from '../constants/colors';

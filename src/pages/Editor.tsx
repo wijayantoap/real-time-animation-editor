@@ -26,7 +26,7 @@ export interface LottieJson {
 function Editor() {
   const [originalAnimation, setOriginalAnimation] = useState<LottieJson | null>(null);
   const [layersShown, setLayersShown] = useState<number[]>([]);
-  const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
+  const [layersDeleted, setLayersDeleted] = useState<number>(-1);
   const [error, setError] = useState<boolean>(false);
   const { animation, setAnimation, saveCount, setSaveCount } = useLottie();
 
@@ -57,7 +57,7 @@ function Editor() {
   };
 
   const deleteLayer = (index: number) => {
-    setLayersDeleted((prevLayersDeleted) => prevLayersDeleted.filter((layerIndex) => layerIndex !== index));
+    setLayersDeleted(index);
     setTimeout(() => {
       setSaveCount((prevState) => prevState + 1);
     }, 500);
@@ -101,7 +101,7 @@ function Editor() {
         setOriginalAnimation(lottieObj);
         setAnimation(lottieObj);
         setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
-        setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
+        setLayersDeleted(-1);
       }
 
       if (error) setError(true);
@@ -120,9 +120,10 @@ function Editor() {
 
   useEffect(() => {
     if (!originalAnimation) return;
-    const filteredLayers = originalAnimation.layers.filter((_, index) => layersDeleted.includes(index));
+    const filteredLayers = originalAnimation.layers.filter((_, index) => index !== layersDeleted);
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
     setOriginalAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
+    setLayersDeleted(-1);
   }, [layersDeleted]);
 
   useEffect(() => {
@@ -165,7 +166,7 @@ function Editor() {
               setAnimation(lottieObj);
               setOriginalAnimation(lottieObj);
               setLayersShown(lottieObj?.layers.map((_: any, index: number) => index));
-              setLayersDeleted(lottieObj?.layers.map((_: any, index: number) => index));
+              setLayersDeleted(-1);
             }
           },
         )
