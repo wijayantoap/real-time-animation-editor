@@ -1,46 +1,79 @@
-# Getting Started with Create React App
+# Mini Real-Time Lottie Animation Editor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the mini real-time Lottie animation editor project! This project aims to create an interactive, collaborative Lottie animation editor where users can upload JSON files, manipulate various properties, manage layers, and work together in real-time. Below you'll find a comprehensive overview of the project's objectives, technology stack, and key areas of focus.
 
-## Available Scripts
+## Objective
 
-In the project directory, you can run:
+The primary goal of this project is to develop a Lottie animation editor with the following capabilities:
 
-### `npm start`
+- Upload and edit JSON animation files.
+- Manipulate animation properties such as speed, color, and scale.
+- Manage layers, including viewing and removing layers.
+- Enable real-time collaboration for multiple users to edit the same animation simultaneously.
+- Import animations from the LottieFiles website using their GraphQL API.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technology Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Frontend:** React
+- **TypeScript:** For type safety
+- **Real-Time Collaboration:** Supabase Realtime
+- **Authentication:** Supabase Auth
+- **GraphQL:** For fetching featured animations from LottieFiles
+- **State Management:** Redux
+- **Database:** Supabase Postgres
 
-### `npm test`
+## Key Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Authentication
 
-### `npm run build`
+- **Supabase Auth:** Used for user authentication to manage user sessions and permissions.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Real-Time Collaboration
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Supabase Realtime:** Utilized for real-time updates, allowing multiple users to edit animations simultaneously.
+- **Chat:** A real-time chat feature where users can discuss changes and collaborate more effectively.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### API Interactions
 
-### `npm run eject`
+- **LottieFiles GraphQL API:** Fetch and showcase featured animations for users to import and edit.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Project Setup
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Clone the Repository**
+   ```sh
+   git clone https://github.com/wijayantoap/real-time-animation-editor
+   cd real-time-animation-editor
+   ```
+2. **Install Dependencies**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- npm install
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. **Run the Application**
 
-## Learn More
+- npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Folder Structure
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```sh
+lottie-animation-editor/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── client/
+│   ├── components/
+│   ├── constants/
+│   ├── context/
+│   ├── helper/
+│   ├── hooks/
+│   ├── pages/
+│   ├── queries/
+│   ├── services/
+│   ├── redux/
+│       ├── slices/
+│       ├── store/
+│   ├── App.tsx
+│   ├── index.tsx
+│   └── ... (other files and folders)
+├── package.json
+└── README.md
+```
