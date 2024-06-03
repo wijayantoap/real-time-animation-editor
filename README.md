@@ -1,6 +1,6 @@
 # Mini Real-Time Lottie Animation Editor
 
-Welcome to the mini real-time Lottie animation editor project! This project aims to create an interactive, collaborative Lottie animation editor where users can upload JSON files, manipulate various properties, manage layers, and work together in real-time. Below you'll find a comprehensive overview of the project's objectives, technology stack, and key areas of focus.
+Welcome to the mini real-time Lottie animation editor project (RottieEditor)! This project aims to create an interactive, collaborative Lottie animation editor where users can upload JSON files, manipulate various properties, manage layers, and work together in real-time. Below you'll find a comprehensive overview of the project's objectives, technology stack, and key areas of focus.
 
 ## Objective
 
@@ -46,11 +46,15 @@ The primary goal of this project is to develop a Lottie animation editor with th
    ```
 2. **Install Dependencies**
 
-- npm install
+   ```sh
+   npm install
+   ```
 
 3. **Run the Application**
 
-- npm start
+   ```sh
+   npm start
+   ```
 
 ## Folder Structure
 
