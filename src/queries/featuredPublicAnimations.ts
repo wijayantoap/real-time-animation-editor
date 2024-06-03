@@ -4,7 +4,6 @@ const GET_FEATURED = gql`
   query GetFeatured($first: Int, $last: Int, $after: String, $before: String) {
     featuredPublicAnimations(first: $first, last: $last, after: $after, before: $before) {
       edges {
-        cursor
         node {
           ...node
         }
@@ -15,13 +14,10 @@ const GET_FEATURED = gql`
         hasPreviousPage
         startCursor
       }
-      totalCount
     }
   }
 
   fragment node on PublicAnimation {
-    bgColor
-    createdAt
     downloads
     id
     jsonUrl
