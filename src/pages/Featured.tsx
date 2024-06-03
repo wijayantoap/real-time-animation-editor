@@ -56,7 +56,6 @@ function Featured() {
           lottieObj: lottieObj,
           ownerId: userData?.user?.id || '',
           dateModified: new Date(),
-          history: [],
         };
         const { error } = await supabase.from('workspaces').insert(newProject);
         if (error) {

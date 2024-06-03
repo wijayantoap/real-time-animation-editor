@@ -19,7 +19,6 @@ export interface WorkspaceData {
   lottieObj: LottieJson;
   ownerId: string;
   dateModified: Date;
-  history: any[];
 }
 
 const VisuallyHiddenInput = styled('input')({
@@ -61,8 +60,7 @@ function Workspace() {
         name: lottieObj?.nm || 'Your exciting animation',
         lottieObj: lottieObj,
         ownerId: data?.user?.id || '',
-        dateModified: new Date(),
-        history: [],
+        dateModified: new Date(),=
       };
       const { data: project, error } = await supabase.from('workspaces').insert(newProject).select();
       if (error) {

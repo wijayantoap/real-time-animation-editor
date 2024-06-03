@@ -26,7 +26,6 @@ function Editor() {
   const [originalAnimation, setOriginalAnimation] = useState<LottieJson | null>(null);
   const [layersShown, setLayersShown] = useState<number[]>([]);
   const [layersDeleted, setLayersDeleted] = useState<number[]>([]);
-  const [animationHistory, setAnimationHistory] = useState<LottieJson[]>([]);
   const [error, setError] = useState<boolean>(false);
   const { animation, setAnimation, layers, saveCount, setSaveCount } = useLottie();
 
@@ -77,7 +76,6 @@ function Editor() {
         lottieObj: lottieObj,
         ownerId: data?.user?.id || '',
         dateModified: new Date(),
-        history: [],
       };
 
       // Update existing workspace
