@@ -79,6 +79,9 @@ function Editor() {
 
   const deleteLayer = (index: number) => {
     setLayersDeleted((prevLayersDeleted) => prevLayersDeleted.filter((layerIndex) => layerIndex !== index));
+    setTimeout(() => {
+      setSaveCount((prevState) => prevState + 1);
+    }, 500);
   };
 
   const handleLottieEvent = useCallback(
@@ -125,7 +128,6 @@ function Editor() {
     const filteredLayers = originalAnimation.layers.filter((_, index) => layersDeleted.includes(index));
     setAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
     setOriginalAnimation((prevAnimation: LottieJson | any) => ({ ...prevAnimation, layers: filteredLayers }));
-    // setSaveCount((prevState) => prevState + 1); // todo: need this
   }, [layersDeleted]);
 
   useEffect(() => {
@@ -190,10 +192,7 @@ function Editor() {
   }, [params?.workspaceId, data?.user?.id]);
 
   useEffect(() => {
-    if (saveCount) {
-      updateWorkspace(animation);
-      console.log('=c', saveCount);
-    }
+    if (saveCount) updateWorkspace(animation);
   }, [saveCount]);
 
   if (!data?.user && !loading) return <Navigate to="/" />;
