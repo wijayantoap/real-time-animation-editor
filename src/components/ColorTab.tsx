@@ -12,30 +12,28 @@ const ColorTab: React.FC = () => {
   const [allColors, setAllColors] = useState<number[][]>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectedColor, setSelectedColor] = useState<number[] | string>([0, 0, 0]);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>, color: number[], index: number) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>, color: number[], index: number | null) => {
     setAnchorEl(event.currentTarget as HTMLButtonElement);
     setSelectedColor(color);
     setSelectedIndex(index);
   };
 
-  function removeDuplicateArrays(arrOfArrays: number[][]): number[][] {
-    // Convert each inner array to a JSON string
+  const removeDuplicateArrays = (arrOfArrays: number[][]): number[][] => {
     const map = new Map<string, number[]>();
     arrOfArrays.forEach((arr: number[]) => {
       const str = JSON.stringify(arr);
       map.set(str, arr);
     });
 
-    // Convert the unique JSON strings back to arrays
     const uniqueArrays: number[][] = Array.from(map.values());
 
     return uniqueArrays;
-  }
+  };
 
   useEffect(() => {
     if (lottie) {
@@ -81,7 +79,7 @@ const ColorTab: React.FC = () => {
                         borderColor: 'black',
                       },
                     }}
-                    onClick={(e) => handleClick(e, color, ci)}
+                    onClick={(e) => handleClick(e, color, index !== 0 ? ci : null)}
                   />
                 </Grid>
               ))}
@@ -108,9 +106,9 @@ const ColorTab: React.FC = () => {
           color={typeof selectedColor === 'string' ? selectedColor : rgbToHex(selectedColor)}
           onChangeComplete={(color) => {
             if (selectedIndex) {
-              const colors = getColors(lottie);
+              let colors = getColors(lottie);
               colors[selectedIndex] = [color.rgb.r, color.rgb.g, color.rgb.b];
-              setAnimation(colorify(colors, lottie));
+              setAnimation(colorify(colors, lottie, true));
             } else {
               setAnimation(replaceColor(selectedColor, color.hex, lottie));
             }

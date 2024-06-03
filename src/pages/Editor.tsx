@@ -79,7 +79,6 @@ function Editor() {
         dateModified: new Date(),
       };
 
-      // Update existing workspace
       const { error } = await supabase.from('workspaces').update(newProject).eq('id', workspaceId).select();
 
       if (error) {
